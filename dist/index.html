@@ -4,76 +4,640 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="description" content="Sandesh Thapa - Data Scientist & Analytics Professional Portfolio" />
+    <meta name="keywords" content="data scientist, analytics, machine learning, python, data analysis" />
+    <meta name="author" content="Sandesh Thapa" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sandesh Thapa - Data Scientist" />
+    <meta property="og:description" content="Data Scientist & Analytics Professional specializing in machine learning, data analysis, and business intelligence" />
+    
+    <!-- Font Awesome -->
     <link
       rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
-      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
       crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    
     <link rel="stylesheet" href="css/main.css" />
-    <title>My Portfolio</title>
+    <title>Sandesh Thapa | Data Scientist & Analytics Professional</title>
   </head>
 
-  <body id="bg-img">
-    <header>
-      <div class="menu-btn">
-        <div class="btn-line"></div>
-        <div class="btn-line"></div>
-        <div class="btn-line"></div>
-      </div>
-
-      <nav class="menu">
-        <div class="menu-branding">
-          <div class="potrait"></div>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <a href="#home">ST</a>
         </div>
-        <ul class="menu-nav">
-          <li class="nav-item current">
-            <a href="/" class="nav-link">
-              Home
-            </a>
-          </li>
-
+        <ul class="nav-menu" id="nav-menu">
           <li class="nav-item">
-            <a href="/about.html" class="nav-link">
-              About Me
-            </a>
+            <a href="#home" class="nav-link">Home</a>
           </li>
-
           <li class="nav-item">
-            <a href="/work.html" class="nav-link">
-              My Work
-            </a>
+            <a href="#about" class="nav-link">About</a>
           </li>
-
           <li class="nav-item">
-            <a href="/contact.html" class="nav-link">
-              Contact Info
-            </a>
+            <a href="#skills" class="nav-link">Skills</a>
+          </li>
+          <li class="nav-item">
+            <a href="#projects" class="nav-link">Projects</a>
+          </li>
+          <li class="nav-item">
+            <a href="#certifications" class="nav-link">Certifications</a>
+          </li>
+          <li class="nav-item">
+            <a href="#experience" class="nav-link">Experience</a>
+          </li>
+          <li class="nav-item">
+            <a href="#contact" class="nav-link">Contact</a>
           </li>
         </ul>
-      </nav>
-    </header>
+        <div class="nav-toggle" id="nav-toggle">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
 
-    <main id="home">
-      <h1 class="lg-heading">
-        Sandesh <span class="text-secondary"> Thapa</span>
-      </h1>
-      <h2 class="sm-heading">
-        Programmer, Database, & Web Designer
-      </h2>
-
-      <div class="icons">
-        <a href="#!">
-          <i class="fab fa-twitter fa-2x"></i>
-        </a>
-        <a href="#!">
-          <i class="fab fa-linkedin fa-2x"></i>
-        </a>
-        <a href="#!">
-          <i class="fab fa-github fa-2x"></i>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1 class="hero-title">
+            Hi, I'm <span class="text-highlight">Sandesh Thapa</span>
+          </h1>
+          <h2 class="hero-subtitle">Data Scientist & Analytics Professional</h2>
+          <p class="hero-description">
+            Transforming data into actionable insights | Machine Learning Enthusiast | 
+            Passionate about solving complex business problems through data-driven solutions
+          </p>
+          <div class="hero-buttons">
+            <a href="#projects" class="btn btn-primary">View My Work</a>
+            <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <div class="image-wrapper">
+            <img src="img/profile.jpg" alt="Sandesh Thapa" />
+            <div class="image-border"></div>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-indicator">
+        <a href="#about" class="scroll-down">
+          <i class="fas fa-chevron-down"></i>
         </a>
       </div>
-    </main>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+      <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-content">
+          <div class="about-text">
+            <p class="lead">
+              I'm a passionate Data Scientist with expertise in machine learning, statistical analysis, 
+              and data visualization. I specialize in turning complex datasets into meaningful insights 
+              that drive business decisions.
+            </p>
+            <p>
+              With a strong foundation in Python, SQL, and various data science tools, I've worked on 
+              projects ranging from predictive modeling to business intelligence dashboards. I'm 
+              constantly learning and staying updated with the latest trends in data science and AI.
+            </p>
+            <p>
+              Currently seeking opportunities in data science and analytics where I can leverage my 
+              skills to solve challenging problems and contribute to data-driven decision making.
+            </p>
+            <div class="about-stats">
+              <div class="stat-item">
+                <span class="stat-number">4+</span>
+                <span class="stat-label">Years Experience</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">15+</span>
+                <span class="stat-label">Data Solutions</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Dedicated</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+      <div class="container">
+        <h2 class="section-title">Skills & Technologies</h2>
+        <div class="skills-grid">
+          <div class="skill-category">
+            <h3 class="skill-category-title">
+              <i class="fas fa-code"></i> Programming Languages
+            </h3>
+            <div class="skill-items">
+              <div class="skill-item">
+                <span class="skill-name">Python</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-width="95"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">SQL</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-width="90"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">R</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-width="85"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">JavaScript</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-width="75"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h3 class="skill-category-title">
+              <i class="fas fa-chart-line"></i> Data Science & ML
+            </h3>
+            <div class="skill-tags">
+              <span class="skill-tag">Machine Learning</span>
+              <span class="skill-tag">Deep Learning</span>
+              <span class="skill-tag">Statistical Analysis</span>
+              <span class="skill-tag">Data Visualization</span>
+              <span class="skill-tag">Predictive Modeling</span>
+              <span class="skill-tag">NLP</span>
+              <span class="skill-tag">Computer Vision</span>
+              <span class="skill-tag">Time Series Analysis</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h3 class="skill-category-title">
+              <i class="fas fa-tools"></i> Tools & Frameworks
+            </h3>
+            <div class="skill-tags">
+              <span class="skill-tag">Pandas</span>
+              <span class="skill-tag">NumPy</span>
+              <span class="skill-tag">Scikit-learn</span>
+              <span class="skill-tag">TensorFlow</span>
+              <span class="skill-tag">PyTorch</span>
+              <span class="skill-tag">Tableau</span>
+              <span class="skill-tag">Power BI</span>
+              <span class="skill-tag">Mode</span>
+              <span class="skill-tag">Looker</span>
+              <span class="skill-tag">Snowflake</span>
+              <span class="skill-tag">Databricks</span>
+              <span class="skill-tag">Azure</span>
+              <span class="skill-tag">Jupyter</span>
+              <span class="skill-tag">Git</span>
+              <span class="skill-tag">Docker</span>
+              <span class="skill-tag">AWS</span>
+              <span class="skill-tag">Spark</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+      <div class="container">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-grid">
+          <div class="project-card">
+            <div class="project-image">
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link" title="View Project">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                  <a href="#" class="project-link" title="View Code">
+                    <i class="fab fa-github"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="project-placeholder">
+                <i class="fas fa-user-slash"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3 class="project-title">Customer Churn Model</h3>
+              <p class="project-description">
+                Developed a predictive churn model using machine learning algorithms to identify customers 
+                at risk of leaving. Enabled proactive retention strategies and reduced customer churn significantly.
+              </p>
+              <div class="project-tags">
+                <span class="project-tag">Python</span>
+                <span class="project-tag">Scikit-learn</span>
+                <span class="project-tag">XGBoost</span>
+                <span class="project-tag">Predictive Modeling</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <div class="project-image">
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link" title="View Project">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                  <a href="#" class="project-link" title="View Code">
+                    <i class="fab fa-github"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="project-placeholder">
+                <i class="fas fa-bullseye"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3 class="project-title">Lead Propensity Model</h3>
+              <p class="project-description">
+                Built a machine learning model to predict lead conversion probability. Helped sales teams 
+                prioritize high-value prospects and improved conversion rates through data-driven targeting.
+              </p>
+              <div class="project-tags">
+                <span class="project-tag">Python</span>
+                <span class="project-tag">Machine Learning</span>
+                <span class="project-tag">Classification</span>
+                <span class="project-tag">Sales Analytics</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <div class="project-image">
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link" title="View Project">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                  <a href="#" class="project-link" title="View Code">
+                    <i class="fab fa-github"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="project-placeholder">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3 class="project-title">Behavioral Clustering</h3>
+              <p class="project-description">
+                Implemented unsupervised learning algorithms to segment customers based on behavioral patterns. 
+                Enabled personalized marketing campaigns and improved customer engagement strategies.
+              </p>
+              <div class="project-tags">
+                <span class="project-tag">Python</span>
+                <span class="project-tag">Clustering</span>
+                <span class="project-tag">K-Means</span>
+                <span class="project-tag">Customer Segmentation</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <div class="project-image">
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link" title="View Project">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                  <a href="#" class="project-link" title="View Code">
+                    <i class="fab fa-github"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="project-placeholder">
+                <i class="fas fa-brain"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3 class="project-title">Intelligence System</h3>
+              <p class="project-description">
+                Developed an intelligent analytics system that processes large volumes of data to generate 
+                actionable business insights. Integrated multiple data sources for comprehensive analysis.
+              </p>
+              <div class="project-tags">
+                <span class="project-tag">Python</span>
+                <span class="project-tag">Data Engineering</span>
+                <span class="project-tag">ETL</span>
+                <span class="project-tag">Business Intelligence</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <div class="project-image">
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link" title="View Project">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                  <a href="#" class="project-link" title="View Code">
+                    <i class="fab fa-github"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="project-placeholder">
+                <i class="fas fa-robot"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3 class="project-title">LLM-Powered Solutions</h3>
+              <p class="project-description">
+                Built applications leveraging Large Language Models for natural language processing tasks. 
+                Implemented solutions for text analysis, content generation, and intelligent automation.
+              </p>
+              <div class="project-tags">
+                <span class="project-tag">Python</span>
+                <span class="project-tag">LLM</span>
+                <span class="project-tag">NLP</span>
+                <span class="project-tag">Transformers</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <div class="project-image">
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link" title="View Project">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                  <a href="#" class="project-link" title="View Code">
+                    <i class="fab fa-github"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="project-placeholder">
+                <i class="fas fa-lightbulb"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3 class="project-title">AI-Powered Customer Insights</h3>
+              <p class="project-description">
+                Created an AI-driven platform that analyzes customer data to generate deep insights. 
+                Combines machine learning and advanced analytics to provide actionable recommendations 
+                for improving customer experience and business outcomes.
+              </p>
+              <div class="project-tags">
+                <span class="project-tag">Python</span>
+                <span class="project-tag">AI/ML</span>
+                <span class="project-tag">Customer Analytics</span>
+                <span class="project-tag">Data Science</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <div class="project-image">
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link" title="View Project">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                  <a href="#" class="project-link" title="View Code">
+                    <i class="fab fa-github"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="project-placeholder">
+                <i class="fas fa-chart-line"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3 class="project-title">In-House BI Tool</h3>
+              <p class="project-description">
+                Designed and developed a custom business intelligence platform from the ground up. 
+                Built interactive dashboards, automated reporting, and real-time analytics capabilities 
+                that enabled stakeholders to make data-driven decisions efficiently.
+              </p>
+              <div class="project-tags">
+                <span class="project-tag">Python</span>
+                <span class="project-tag">BI Development</span>
+                <span class="project-tag">Data Visualization</span>
+                <span class="project-tag">Dashboard</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="certifications">
+      <div class="container">
+        <h2 class="section-title">Certifications</h2>
+        <div class="certifications-grid">
+          <div class="certification-card">
+            <div class="certification-icon">
+              <i class="fab fa-microsoft"></i>
+            </div>
+            <div class="certification-content">
+              <h3 class="certification-title">Microsoft Certified: Azure Data Fundamentals</h3>
+              <p class="certification-issuer">Microsoft</p>
+            </div>
+          </div>
+          <div class="certification-card">
+            <div class="certification-icon">
+              <i class="fab fa-microsoft"></i>
+            </div>
+            <div class="certification-content">
+              <h3 class="certification-title">Microsoft Certified: Azure AI Fundamentals</h3>
+              <p class="certification-issuer">Microsoft</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="experience">
+      <div class="container">
+        <h2 class="section-title">Experience & Education</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-icon">
+                <i class="fas fa-briefcase"></i>
+              </div>
+              <div class="timeline-text">
+                <h3 class="timeline-title">Data Engineer</h3>
+                <span class="timeline-company">SejalIT, Pleasanton, CA</span>
+                <span class="timeline-date">Oct 2025 - Present</span>
+                <p class="timeline-description">
+                  Designing and implementing scalable data pipelines and infrastructure for enterprise applications.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-icon">
+                <i class="fas fa-briefcase"></i>
+              </div>
+              <div class="timeline-text">
+                <h3 class="timeline-title">Data Scientist/Analyst</h3>
+                <span class="timeline-company">CDK Global, San Jose, CA</span>
+                <span class="timeline-date">Aug 2021 - Sep 2025</span>
+                <p class="timeline-description">
+                  Developed machine learning models and analytics solutions to drive business insights and decision-making.
+                </p>
+                <ul class="timeline-list">
+                  <li>Built and deployed predictive models including churn and lead propensity models</li>
+                  <li>Developed behavioral clustering algorithms for customer segmentation</li>
+                  <li>Created AI-powered customer insights systems using LLM technologies</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-icon">
+                <i class="fas fa-briefcase"></i>
+              </div>
+              <div class="timeline-text">
+                <h3 class="timeline-title">ETL Developer Intern</h3>
+                <span class="timeline-company">CDK Global, Destin, FL</span>
+                <span class="timeline-date">June 2020 - Aug 2020</span>
+                <p class="timeline-description">
+                  Developed and maintained ETL processes for data integration and transformation.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-icon">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+              <div class="timeline-text">
+                <h3 class="timeline-title">Master in Data Science</h3>
+                <span class="timeline-company">University of West Florida</span>
+                <span class="timeline-date">Concentration: Analytics & Modeling</span>
+                <p class="timeline-description">
+                  Specialized in analytics, modeling, machine learning, and statistical analysis.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-icon">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+              <div class="timeline-text">
+                <h3 class="timeline-title">Bachelor in Information Technology</h3>
+                <span class="timeline-company">Concentration: Computer Information System</span>
+                <span class="timeline-date">Minor: Mathematics</span>
+                <p class="timeline-description">
+                  Focused on computer information systems with a strong foundation in mathematics.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+      <div class="container">
+        <h2 class="section-title">Get In Touch</h2>
+        <p class="contact-subtitle">
+          I'm currently looking for opportunities in data science and analytics. 
+          Feel free to reach out if you'd like to collaborate or discuss potential opportunities.
+        </p>
+        <div class="contact-content">
+          <div class="contact-info">
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="contact-details">
+                <h3>Email</h3>
+                <a href="mailto:sandesh6thapa@gmail.com">sandesh6thapa@gmail.com</a>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div class="contact-details">
+                <h3>Phone</h3>
+                <a href="tel:+19163423436">+1 (916) 342-3436</a>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="contact-details">
+                <h3>Location</h3>
+                <p>Available for Remote & On-site Opportunities</p>
+              </div>
+            </div>
+          </div>
+          <div class="contact-social">
+            <h3>Connect With Me</h3>
+            <div class="social-links">
+              <span class="social-link" style="cursor: default;">
+                <i class="fab fa-linkedin"></i>
+                <span>LinkedIn</span>
+              </span>
+              <span class="social-link" style="cursor: default;">
+                <i class="fab fa-github"></i>
+                <span>GitHub</span>
+              </span>
+              <span class="social-link" style="cursor: default;">
+                <i class="fab fa-twitter"></i>
+                <span>Twitter</span>
+              </span>
+              <span class="social-link" style="cursor: default;">
+                <i class="fab fa-kaggle"></i>
+                <span>Kaggle</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2024 Sandesh Thapa. All rights reserved.</p>
+        <p>Built with passion for data science and analytics</p>
+      </div>
+    </footer>
 
     <script src="js/main.js"></script>
   </body>

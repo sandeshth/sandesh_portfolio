@@ -1,30 +1,66 @@
-$primary-color: #444;
-$secondary-color: #eece1a;
-$show-home-image: true;
-$home-image: url(../img/front.jpg);
-$background-opacity: 0.9;
+// Colors
+$primary-color: #1a1a2e;
+$secondary-color: #0f3460;
+$accent-color: #16213e;
+$highlight-color: #00d4ff;
+$text-primary: #ffffff;
+$text-secondary: #b8b8b8;
+$gradient-start: #667eea;
+$gradient-end: #764ba2;
+$gradient-alt-start: #f093fb;
+$gradient-alt-end: #f5576c;
 
-@mixin easeOut {
-  transition: all 1s ease-out;
+// Typography
+$font-primary: 'Poppins', sans-serif;
+$font-secondary: 'Raleway', sans-serif;
+
+// Spacing
+$spacing-xs: 0.5rem;
+$spacing-sm: 1rem;
+$spacing-md: 2rem;
+$spacing-lg: 3rem;
+$spacing-xl: 4rem;
+
+// Breakpoints
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// Transitions
+@mixin transition($property: all, $duration: 0.3s, $easing: ease-in-out) {
+  transition: $property $duration $easing;
 }
 
-@mixin background {
-  @if $show-home-image {
-    &#bg-img {
-      background: $home-image;
-      background-attachment: fixed;
-      background-size: cover;
+@mixin easeOut {
+  @include transition();
+}
 
-      &:after {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        background: rgba($primary-color, $background-opacity);
-      }
-    }
+// Box Shadow
+@mixin box-shadow($level: 1) {
+  @if $level == 1 {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  } @else if $level == 2 {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  } @else if $level == 3 {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  } @else if $level == 4 {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  }
+}
+
+// Gradient
+@mixin gradient($start: $gradient-start, $end: $gradient-end) {
+  background: linear-gradient(135deg, $start 0%, $end 100%);
+}
+
+// Container
+@mixin container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+  
+  @media (max-width: $breakpoint-md) {
+    padding: 0 $spacing-sm;
   }
 }

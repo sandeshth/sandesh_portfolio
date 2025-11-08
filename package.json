@@ -1,14 +1,18 @@
 {
   "name": "sandesh_portfolio",
-  "version": "1.0.0",
-  "description": "My Portfolio",
+  "version": "2.0.0",
+  "description": "Modern Data Scientist Portfolio",
   "main": "index.js",
   "scripts": {
-    "sass": "node-sass -w scss/ -o dist/css/ --recursive"
+    "sass": "sass scss/main.scss dist/css/main.css --watch",
+    "build": "sass scss/main.scss dist/css/main.css --style compressed",
+    "dev": "sass scss/main.scss dist/css/main.css --watch",
+    "serve": "npx http-server dist -p 8080 -o"
   },
   "author": "Sandesh Thapa",
   "license": "ISC",
   "dependencies": {
-    "node-sass": "^4.11.0"
-  }
+    "sass": "^1.69.5"
+  },
+  "devDependencies": {}
 }
