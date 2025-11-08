@@ -904,6 +904,111 @@ body {
   }
 }
 
+// Cookie Banner
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba($primary-color, 0.98);
+  backdrop-filter: blur(10px);
+  padding: $spacing-md;
+  @include box-shadow(3);
+  z-index: 10000;
+  display: none;
+  transform: translateY(100%);
+  @include transition();
+  
+  &.show {
+    transform: translateY(0);
+  }
+}
+
+.cookie-content {
+  @include container;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+  
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.cookie-text {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-sm;
+  flex: 1;
+  color: $text-primary;
+  
+  i {
+    color: $highlight-color;
+    font-size: 1.5rem;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+  }
+  
+  p {
+    margin: 0;
+    line-height: 1.6;
+    font-size: 0.9rem;
+    
+    strong {
+      color: $highlight-color;
+    }
+    
+    a {
+      color: $highlight-color;
+      text-decoration: underline;
+      
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+.cookie-buttons {
+  display: flex;
+  gap: $spacing-sm;
+  flex-shrink: 0;
+}
+
+.btn-cookie {
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 25px;
+  font-weight: 500;
+  cursor: pointer;
+  @include transition();
+  font-size: 0.9rem;
+  
+  &.btn-accept {
+    background: $highlight-color;
+    color: $primary-color;
+    
+    &:hover {
+      background: rgba($highlight-color, 0.9);
+      transform: translateY(-2px);
+    }
+  }
+  
+  &.btn-decline {
+    background: transparent;
+    color: $text-primary;
+    border: 2px solid rgba($text-secondary, 0.5);
+    
+    &:hover {
+      border-color: $text-secondary;
+      background: rgba($text-secondary, 0.1);
+    }
+  }
+}
+
 // Footer
 .footer {
   background: $primary-color;

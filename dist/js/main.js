@@ -141,6 +141,118 @@ function validateEmail(email) {
   return re.test(email);
 }
 
+// Visitor Count Tracking
+function updateVisitorCount() {
+  const visitorCountEl = document.getElementById('visitor-count');
+  if (!visitorCountEl) return;
+
+  // Check if user has accepted cookies
+  const cookiesAccepted = localStorage.getItem('cookiesAccepted');
+  
+  if (cookiesAccepted === 'true') {
+    // Get or initialize visitor count
+    let totalVisitors = parseInt(localStorage.getItem('totalVisitors') || '0');
+    const lastVisit = localStorage.getItem('lastVisit');
+    const today = new Date().toDateString();
+    
+    // Increment if this is a new day visit
+    if (lastVisit !== today) {
+      totalVisitors++;
+      localStorage.setItem('totalVisitors', totalVisitors.toString());
+      localStorage.setItem('lastVisit', today);
+    }
+    
+    // Format number with K for thousands
+    const formattedCount = totalVisitors >= 1000 
+      ? (totalVisitors / 1000).toFixed(1) + 'K+' 
+      : totalVisitors.toString();
+    
+    visitorCountEl.textContent = formattedCount;
+    
+    // Animate the number
+    visitorCountEl.style.transform = 'scale(1.2)';
+    setTimeout(() => {
+      visitorCountEl.style.transform = 'scale(1)';
+    }, 300);
+  } else {
+    visitorCountEl.textContent = '0';
+  }
+}
+
+// Cookie Banner Functionality
+const cookieBanner = document.getElementById('cookie-banner');
+const acceptCookiesBtn = document.getElementById('accept-cookies');
+const declineCookiesBtn = document.getElementById('decline-cookies');
+
+function showCookieBanner() {
+  const cookiesAccepted = localStorage.getItem('cookiesAccepted');
+  if (cookiesAccepted === null && cookieBanner) {
+    cookieBanner.style.display = 'flex';
+    setTimeout(() => {
+      cookieBanner.classList.add('show');
+    }, 100);
+  }
+}
+
+function hideCookieBanner() {
+  if (cookieBanner) {
+    cookieBanner.classList.remove('show');
+    setTimeout(() => {
+      cookieBanner.style.display = 'none';
+    }, 300);
+  }
+}
+
+if (acceptCookiesBtn) {
+  acceptCookiesBtn.addEventListener('click', () => {
+    localStorage.setItem('cookiesAccepted', 'true');
+    hideCookieBanner();
+    updateVisitorCount();
+    
+    // Enable Google Analytics if it was disabled
+    if (typeof gtag !== 'undefined') {
+      gtag('consent', 'update', {
+        'analytics_storage': 'granted'
+      });
+    }
+  });
+}
+
+if (declineCookiesBtn) {
+  declineCookiesBtn.addEventListener('click', () => {
+    localStorage.setItem('cookiesAccepted', 'false');
+    hideCookieBanner();
+    
+    // Disable Google Analytics
+    if (typeof gtag !== 'undefined') {
+      gtag('consent', 'update', {
+        'analytics_storage': 'denied'
+      });
+    }
+  });
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+  showCookieBanner();
+  updateVisitorCount();
+  
+  // Update visitor count periodically (every 30 seconds)
+  setInterval(updateVisitorCount, 30000);
+});
+
+// Track page views for Google Analytics (only if cookies accepted)
+if (typeof gtag !== 'undefined') {
+  const cookiesAccepted = localStorage.getItem('cookiesAccepted');
+  if (cookiesAccepted === 'true') {
+    gtag('event', 'page_view', {
+      'page_title': document.title,
+      'page_location': window.location.href
+    });
+  }
+}
+
 // Console message
 console.log('%c👋 Hello! Interested in my work?', 'color: #00d4ff; font-size: 20px; font-weight: bold;');
 console.log('%cFeel free to reach out!', 'color: #b8b8b8; font-size: 14px;');
+console.log('%c📊 Analytics: This site uses Google Analytics to track visitor traffic.', 'color: #b8b8b8; font-size: 12px;');

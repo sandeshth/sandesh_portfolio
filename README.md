@@ -57,6 +57,28 @@ Or use the watch command:
 npm run sass
 ```
 
+## Google Analytics Setup
+
+This portfolio includes Google Analytics tracking. To set it up:
+
+1. **Get your Measurement ID** from Google Analytics (see `GOOGLE_ANALYTICS_SETUP.md`)
+2. **Update `dist/index.html`** - Replace `G-XXXXXXXXXX` with your actual Measurement ID
+3. **View analytics** at [Google Analytics Dashboard](https://analytics.google.com/)
+
+**Note**: The visitor count displayed on the About page uses localStorage for a simple approximation. For accurate analytics, check your Google Analytics dashboard.
+
+See `GOOGLE_ANALYTICS_SETUP.md` for detailed instructions.
+
+## CI/CD Pipeline
+
+This project includes a GitHub Actions workflow for automatic deployment:
+
+- **Automatic builds** on every push to `main`/`master`
+- **Automatic deployment** to GitHub Pages
+- **SCSS compilation** handled automatically
+
+See `DEPLOYMENT.md` for deployment instructions.
+
 ## Customization
 
 ### Update Personal Information

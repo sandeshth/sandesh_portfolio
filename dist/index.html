@@ -29,6 +29,19 @@
     
     <link rel="stylesheet" href="css/main.css" />
     <title>Sandesh Thapa | Data Scientist & Analytics Professional</title>
+    
+    <!-- Google Analytics (GA4) -->
+    <!-- Replace G-XXXXXXXXXX with your Google Analytics Measurement ID from GA4 property -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX', {
+        'anonymize_ip': true,
+        'cookie_flags': 'SameSite=None;Secure'
+      });
+    </script>
   </head>
 
   <body>
@@ -131,8 +144,8 @@
                 <span class="stat-label">Data Solutions</span>
               </div>
               <div class="stat-item">
-                <span class="stat-number">100%</span>
-                <span class="stat-label">Dedicated</span>
+                <span class="stat-number" id="visitor-count">0</span>
+                <span class="stat-label">Website Visitors</span>
               </div>
             </div>
           </div>
@@ -638,6 +651,25 @@
         <p>Built with passion for data science and analytics</p>
       </div>
     </footer>
+
+    <!-- Cookie/Tracking Disclaimer Banner -->
+    <div id="cookie-banner" class="cookie-banner">
+      <div class="cookie-content">
+        <div class="cookie-text">
+          <i class="fas fa-info-circle"></i>
+          <p>
+            <strong>Privacy Notice:</strong> This website uses Google Analytics to track visitor traffic 
+            and improve user experience. Your visit is being tracked anonymously to understand website 
+            usage patterns. You can view the analytics dashboard to see visitor statistics. 
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Learn more about our privacy practices</a>.
+          </p>
+        </div>
+        <div class="cookie-buttons">
+          <button id="accept-cookies" class="btn-cookie btn-accept">Accept</button>
+          <button id="decline-cookies" class="btn-cookie btn-decline">Decline</button>
+        </div>
+      </div>
+    </div>
 
     <script src="js/main.js"></script>
   </body>
