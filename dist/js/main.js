@@ -4,8 +4,9 @@ const navMenu = document.getElementById('nav-menu');
 const navLinks = document.querySelectorAll('.nav-link');
 
 navToggle.addEventListener('click', () => {
-  navToggle.classList.toggle('active');
+  const isActive = navToggle.classList.toggle('active');
   navMenu.classList.toggle('active');
+  navToggle.setAttribute('aria-expanded', isActive.toString());
 });
 
 // Close mobile menu when clicking on a link
@@ -13,6 +14,7 @@ navLinks.forEach(link => {
   link.addEventListener('click', () => {
     navToggle.classList.remove('active');
     navMenu.classList.remove('active');
+    navToggle.setAttribute('aria-expanded', 'false');
   });
 });
 
@@ -107,76 +109,29 @@ skillBars.forEach(bar => {
   skillObserver.observe(bar);
 });
 
-// Typing effect for hero title (optional enhancement)
-const heroTitle = document.querySelector('.hero-title');
-if (heroTitle) {
-  const text = heroTitle.textContent;
-  heroTitle.textContent = '';
-  let index = 0;
-  
-  function typeWriter() {
-    if (index < text.length) {
-      heroTitle.textContent += text.charAt(index);
-      index++;
-      setTimeout(typeWriter, 50);
-    }
-  }
-  
-  // Uncomment to enable typing effect
-  // setTimeout(typeWriter, 500);
-}
-
-// Parallax effect for hero section
+// Parallax effect for hero background (transforms the absolutely-positioned
+// overlay only, so it doesn't drag the hero's layout box — and the content
+// after it — out of place while scrolling)
 window.addEventListener('scroll', () => {
   const scrolled = window.pageYOffset;
-  const hero = document.querySelector('.hero');
-  if (hero) {
-    hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+  const heroOverlay = document.querySelector('.hero-overlay');
+  if (heroOverlay) {
+    heroOverlay.style.transform = `translateY(${scrolled * 0.5}px)`;
   }
 });
 
-// Form validation (if contact form is added later)
-function validateEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
-}
-
-// Visitor Count Tracking
-function updateVisitorCount() {
-  const visitorCountEl = document.getElementById('visitor-count');
-  if (!visitorCountEl) return;
-
-  // Check if user has accepted cookies
-  const cookiesAccepted = localStorage.getItem('cookiesAccepted');
-  
-  if (cookiesAccepted === 'true') {
-    // Get or initialize visitor count
-    let totalVisitors = parseInt(localStorage.getItem('totalVisitors') || '0');
-    const lastVisit = localStorage.getItem('lastVisit');
-    const today = new Date().toDateString();
-    
-    // Increment if this is a new day visit
-    if (lastVisit !== today) {
-      totalVisitors++;
-      localStorage.setItem('totalVisitors', totalVisitors.toString());
-      localStorage.setItem('lastVisit', today);
-    }
-    
-    // Format number with K for thousands
-    const formattedCount = totalVisitors >= 1000 
-      ? (totalVisitors / 1000).toFixed(1) + 'K+' 
-      : totalVisitors.toString();
-    
-    visitorCountEl.textContent = formattedCount;
-    
-    // Animate the number
-    visitorCountEl.style.transform = 'scale(1.2)';
-    setTimeout(() => {
-      visitorCountEl.style.transform = 'scale(1)';
-    }, 300);
-  } else {
-    visitorCountEl.textContent = '0';
-  }
+// Google Analytics Consent Mode: grants analytics_storage and fires an
+// explicit page_view once the visitor has consented (default is 'denied',
+// set in index.html before gtag config loads).
+function grantAnalyticsConsent() {
+  if (typeof gtag === 'undefined') return;
+  gtag('consent', 'update', {
+    'analytics_storage': 'granted'
+  });
+  gtag('event', 'page_view', {
+    'page_title': document.title,
+    'page_location': window.location.href
+  });
 }
 
 // Cookie Banner Functionality
@@ -207,14 +162,7 @@ if (acceptCookiesBtn) {
   acceptCookiesBtn.addEventListener('click', () => {
     localStorage.setItem('cookiesAccepted', 'true');
     hideCookieBanner();
-    updateVisitorCount();
-    
-    // Enable Google Analytics if it was disabled
-    if (typeof gtag !== 'undefined') {
-      gtag('consent', 'update', {
-        'analytics_storage': 'granted'
-      });
-    }
+    grantAnalyticsConsent();
   });
 }
 
@@ -222,35 +170,21 @@ if (declineCookiesBtn) {
   declineCookiesBtn.addEventListener('click', () => {
     localStorage.setItem('cookiesAccepted', 'false');
     hideCookieBanner();
-    
-    // Disable Google Analytics
-    if (typeof gtag !== 'undefined') {
-      gtag('consent', 'update', {
-        'analytics_storage': 'denied'
-      });
-    }
+    // Analytics storage already defaults to 'denied' — nothing to disable.
   });
 }
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
   showCookieBanner();
-  updateVisitorCount();
-  
-  // Update visitor count periodically (every 30 seconds)
-  setInterval(updateVisitorCount, 30000);
-});
 
-// Track page views for Google Analytics (only if cookies accepted)
-if (typeof gtag !== 'undefined') {
-  const cookiesAccepted = localStorage.getItem('cookiesAccepted');
-  if (cookiesAccepted === 'true') {
-    gtag('event', 'page_view', {
-      'page_title': document.title,
-      'page_location': window.location.href
-    });
+  // Returning visitor who already consented in a previous session: grant
+  // consent again for this page load (Consent Mode doesn't persist granted
+  // state across page loads on its own).
+  if (localStorage.getItem('cookiesAccepted') === 'true') {
+    grantAnalyticsConsent();
   }
-}
+});
 
 // Console message
 console.log('%c👋 Hello! Interested in my work?', 'color: #00d4ff; font-size: 20px; font-weight: bold;');

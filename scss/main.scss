@@ -183,7 +183,10 @@ body {
   display: none;
   flex-direction: column;
   cursor: pointer;
-  
+  background: none;
+  border: none;
+  padding: 0;
+
   @media (max-width: $breakpoint-md) {
     display: flex;
   }
@@ -266,12 +269,21 @@ body {
 .hero-subtitle {
   font-size: 1.5rem;
   color: $highlight-color;
-  margin-bottom: $spacing-md;
+  margin-bottom: $spacing-xs;
   font-weight: 500;
-  
+
   @media (max-width: $breakpoint-md) {
     font-size: 1.2rem;
   }
+}
+
+.hero-roles {
+  font-size: 0.95rem;
+  color: $text-secondary;
+  margin-bottom: $spacing-md;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .hero-description {

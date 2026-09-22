@@ -1,6 +1,7 @@
-# Sandesh Thapa - Data Scientist Portfolio
+# Sandesh Thapa - Data Professional Portfolio
 
-A modern, responsive portfolio website showcasing data science projects, skills, and experience.
+A modern, responsive portfolio website showcasing data projects, skills, and experience across
+analytics, data engineering, and data science.
 
 ## Features
 
@@ -59,13 +60,13 @@ npm run sass
 
 ## Google Analytics Setup
 
-This portfolio includes Google Analytics tracking. To set it up:
+This portfolio includes Google Analytics tracking, gated behind the cookie consent banner via
+Google's Consent Mode (analytics storage defaults to `denied` until the visitor clicks Accept).
+To set it up:
 
 1. **Get your Measurement ID** from Google Analytics (see `GOOGLE_ANALYTICS_SETUP.md`)
 2. **Update `dist/index.html`** - Replace `G-XXXXXXXXXX` with your actual Measurement ID
 3. **View analytics** at [Google Analytics Dashboard](https://analytics.google.com/)
-
-**Note**: The visitor count displayed on the About page uses localStorage for a simple approximation. For accurate analytics, check your Google Analytics dashboard.
 
 See `GOOGLE_ANALYTICS_SETUP.md` for detailed instructions.
 
@@ -86,14 +87,32 @@ See `DEPLOYMENT.md` for deployment instructions.
 1. **Contact Information**: Edit `dist/index.html` and update:
    - Email address
    - Phone number
-   - Social media links (LinkedIn, GitHub, Twitter, Kaggle)
+   - Social links (LinkedIn, GitHub, Twitter, Kaggle) — these are currently non-clickable
+     `<span>` placeholders in the `.social-links` block. To activate one, change its `<span
+     class="social-link" style="cursor: default;">` to `<a class="social-link" href="https://..."
+     target="_blank" rel="noopener">` and drop the inline `cursor` style.
 
 2. **About Section**: Update the about text in the About section
 
 3. **Projects**: Replace placeholder projects with your actual projects:
    - Update project titles, descriptions, and tags
-   - Add links to live projects and GitHub repositories
    - Replace placeholder icons with actual project images
+   - **Adding live/repo links**: the "View Project" / "View Code" hover icons were removed from
+     `dist/index.html` because they pointed nowhere (`href="#"`). Once you have real demo/repo
+     URLs, re-add a `.project-overlay` block inside each `.project-image` div (styles already
+     exist in `scss/main.scss`):
+     ```html
+     <div class="project-overlay">
+       <div class="project-links">
+         <a href="https://your-demo-url" class="project-link" title="View Project" target="_blank" rel="noopener">
+           <i class="fas fa-external-link-alt"></i>
+         </a>
+         <a href="https://github.com/you/repo" class="project-link" title="View Code" target="_blank" rel="noopener">
+           <i class="fab fa-github"></i>
+         </a>
+       </div>
+     </div>
+     ```
 
 4. **Experience**: Update the timeline with your actual work experience and education
 
@@ -158,7 +177,7 @@ ISC
 
 ## Author
 
-Sandesh Thapa - Data Scientist & Analytics Professional
+Sandesh Thapa - Data Professional (Analyst, Engineer & Scientist)
 
 ---
 

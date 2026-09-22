@@ -3,30 +3,23 @@
 ## ✅ What Has Been Implemented
 
 ### 1. Google Analytics Integration
-- ✅ GA4 tracking code added to `dist/index.html`
+- ✅ GA4 tracking code added to `dist/index.html` (Measurement ID `G-HHMRX6ZBCR` already configured)
 - ✅ IP anonymization enabled for privacy
-- ✅ Cookie consent integration
-- ⚠️ **Action Required**: Replace `G-XXXXXXXXXX` with your actual Measurement ID
+- ✅ Google Consent Mode: analytics storage defaults to `denied`, granted only on Accept
 
-### 2. Visitor Count Display
-- ✅ Shows visitor count in About section stats
-- ✅ Uses localStorage for simple tracking
-- ✅ Updates automatically
-- ✅ Respects cookie consent preferences
-
-### 3. Cookie Consent Banner
+### 2. Cookie Consent Banner
 - ✅ Privacy notice banner at bottom of page
 - ✅ Accept/Decline buttons
 - ✅ Respects user choice
-- ✅ Only tracks after consent
+- ✅ Tracking is actually blocked (not just unrecorded) until consent is granted
 
-### 4. CI/CD Pipeline
+### 3. CI/CD Pipeline
 - ✅ GitHub Actions workflow created (`.github/workflows/deploy.yml`)
 - ✅ Automatic SCSS compilation
 - ✅ Automatic deployment to GitHub Pages
 - ✅ Runs on push to main/master branch
 
-## 📋 Next Steps
+## 📋 Setup Steps (already completed — kept here for reference if you ever rotate the ID)
 
 ### Step 1: Get Your Google Analytics Measurement ID
 
@@ -38,8 +31,9 @@
 ### Step 2: Update the Measurement ID
 
 1. Open `dist/index.html`
-2. Find line 35 and 40 (Google Analytics script)
-3. Replace `G-XXXXXXXXXX` with your actual Measurement ID in **both places**
+2. Find the Google Analytics `<script>` block in `<head>` (search for `G-HHMRX6ZBCR`)
+3. Replace `G-HHMRX6ZBCR` with your actual Measurement ID in **both places**: the script `src` URL
+   and the `gtag('config', ...)` call
 
 ### Step 3: Enable GitHub Pages
 
@@ -66,7 +60,6 @@ The CI/CD pipeline will automatically:
 After setup, view your analytics:
 - **Real-time visitors**: Google Analytics → Reports → Realtime
 - **Detailed reports**: Google Analytics → Reports → Engagement
-- **Visitor count on site**: Check the About section stats
 
 ## 🔒 Privacy & Compliance
 
@@ -86,17 +79,16 @@ After setup, view your analytics:
 
 ### Modified Files:
 - `dist/index.html` - Added GA tracking & cookie banner
-- `dist/js/main.js` - Added visitor tracking & cookie consent logic
+- `dist/js/main.js` - Added page view tracking & Consent Mode gating
 - `scss/main.scss` - Added cookie banner styles
 - `README.md` - Updated with GA & CI/CD info
 
 ## 🎯 Features
 
-### Visitor Tracking
+### Analytics Tracking
 - Tracks page views
 - Tracks user interactions
-- Shows visitor count (approximate)
-- Respects privacy preferences
+- Nothing is sent to Google until consent is granted (Consent Mode)
 
 ### Cookie Banner
 - Appears on first visit
@@ -123,11 +115,6 @@ After setup, view your analytics:
 - Verify `package.json` scripts
 - Ensure SCSS compiles without errors
 - Check GitHub Pages settings
-
-### Visitor Count Shows 0?
-- Accept cookies via banner
-- Clear browser cache
-- Check localStorage in browser DevTools
 
 ## 📞 Support
 

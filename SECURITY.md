@@ -58,20 +58,28 @@ Your portfolio website is a **static site** with no backend, which makes it inhe
    - ✅ No file uploads
    - ✅ Static content only
 
-## 🔐 Additional Security Recommendations
+## 🔐 Security Headers: What's Actually Implemented
 
-### 1. **Content Security Policy (CSP)**
-Add CSP headers to prevent XSS attacks. Add this to your HTML `<head>`:
+`dist/index.html` sets two headers via `<meta http-equiv>`:
 
-```html
-<meta http-equiv="Content-Security-Policy" 
-      content="default-src 'self'; 
-               script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; 
-               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-               font-src 'self' https://fonts.gstatic.com; 
-               img-src 'self' data: https:; 
-               connect-src 'self' https://www.google-analytics.com;">
-```
+- ✅ **Content-Security-Policy** — this *does* work via `<meta>` and is live on the site. It
+  restricts scripts/styles/fonts/connections to the specific origins the site actually uses
+  (self, Google Fonts, Font Awesome CDN, Google Analytics).
+- ✅ **Referrer-Policy** — also works via `<meta>` and is live (`strict-origin-when-cross-origin`).
+
+**Deliberately not included**, because browsers ignore them entirely outside a real HTTP
+response header — a `<meta http-equiv>` version is a no-op that only gives a false sense of
+protection:
+- ❌ `X-Frame-Options` (clickjacking protection)
+- ❌ `X-Content-Type-Options` (MIME-sniffing protection)
+- ❌ `X-XSS-Protection` (deprecated in all current browsers regardless of delivery method)
+
+GitHub Pages doesn't let you attach custom response headers to a static site, so getting the
+frame/content-type protections for real would require fronting the site with something that can
+set headers — e.g. Cloudflare Pages, Netlify, or a Cloudflare Worker/CDN in front of GitHub
+Pages. For a static portfolio with no user input and no iframes to worry about, the practical
+risk this leaves on the table is low, but it's worth knowing the gap exists rather than assuming
+the meta tags cover it.
 
 ### 2. **Protect Contact Information** (Optional)
 If you're concerned about spam:
@@ -132,7 +140,9 @@ If you add contact forms in the future:
 - ✅ `.gitignore` properly configured
 
 ### Recommended Additions:
-- ⚠️ Add Content Security Policy (CSP) headers
+- ⚠️ Front the site with a CDN/host that supports real HTTP response headers (Cloudflare Pages,
+  Netlify) if `X-Frame-Options`/`X-Content-Type-Options` protection matters to you — GitHub
+  Pages can't set them
 - ⚠️ Consider contact form instead of direct email
 - ⚠️ Regular dependency updates (`npm audit`)
 
@@ -154,9 +164,10 @@ npm audit
 - Review any alerts GitHub provides
 
 ### 4. **Test Your Site**
-- Use browser DevTools → Security tab
+- Use browser DevTools → Security/Network tab
 - Check HTTPS certificate
-- Verify CSP headers (if added)
+- Verify the CSP and Referrer-Policy headers are present in the response (DevTools → Network →
+  select the document request → Headers)
 
 ## 💡 Key Takeaways
 

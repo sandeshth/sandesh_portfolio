@@ -4,27 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <meta name="description" content="Sandesh Thapa - Data Scientist & Analytics Professional Portfolio" />
-    <meta name="keywords" content="data scientist, analytics, machine learning, python, data analysis" />
+    <meta name="description" content="Sandesh Thapa - Data Professional Portfolio | Analyst, Engineer & Scientist" />
+    <meta name="keywords" content="data analyst, data engineer, data scientist, data professional, analytics, machine learning, python, sql, etl, data engineering, business intelligence" />
     <meta name="author" content="Sandesh Thapa" />
-    
+
     <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
-                   font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
-                   img-src 'self' data: https:; 
+    <!-- Note: X-Frame-Options / X-Content-Type-Options / X-XSS-Protection are NOT enforced via <meta>
+         (browsers only honor them as real HTTP response headers). GitHub Pages doesn't let this site
+         set custom response headers, so only CSP and Referrer-Policy below actually take effect. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+                   font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   img-src 'self' data: https:;
                    connect-src 'self' https://www.google-analytics.com;">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Sandesh Thapa - Data Scientist" />
-    <meta property="og:description" content="Data Scientist & Analytics Professional specializing in machine learning, data analysis, and business intelligence" />
+    <meta property="og:title" content="Sandesh Thapa - Data Professional" />
+    <meta property="og:description" content="Data Professional specializing in analytics, data engineering, and machine learning — open to Data Analyst, Data Engineer, and Data Scientist roles" />
     
     <!-- Font Awesome -->
     <link
@@ -38,17 +38,22 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     
     <link rel="stylesheet" href="css/main.css" />
-    <title>Sandesh Thapa | Data Scientist & Analytics Professional</title>
-    
+    <title>Sandesh Thapa | Data Professional — Analyst, Engineer & Scientist</title>
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HHMRX6ZBCR"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
+      // Deny analytics storage by default; consent is only granted once the
+      // visitor accepts the cookie banner (see js/main.js).
+      gtag('consent', 'default', {
+        'analytics_storage': 'denied'
+      });
       gtag('config', 'G-HHMRX6ZBCR', {
         'anonymize_ip': true,
         'cookie_flags': 'SameSite=None;Secure'
@@ -86,11 +91,11 @@
             <a href="#contact" class="nav-link">Contact</a>
           </li>
         </ul>
-        <div class="nav-toggle" id="nav-toggle">
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-menu">
           <span class="bar"></span>
           <span class="bar"></span>
           <span class="bar"></span>
-        </div>
+        </button>
       </div>
       </nav>
 
@@ -102,10 +107,11 @@
           <h1 class="hero-title">
             Hi, I'm <span class="text-highlight">Sandesh Thapa</span>
       </h1>
-          <h2 class="hero-subtitle">Data Scientist & Analytics Professional</h2>
+          <h2 class="hero-subtitle">Data Professional</h2>
+          <p class="hero-roles">Analyst &bull; Engineer &bull; Scientist</p>
           <p class="hero-description">
-            Transforming data into actionable insights | Machine Learning Enthusiast | 
-            Passionate about solving complex business problems through data-driven solutions
+            Transforming data into actionable insights across analytics, engineering, and machine learning —
+            passionate about solving complex business problems through data-driven solutions.
           </p>
           <div class="hero-buttons">
             <a href="#projects" class="btn btn-primary">View My Work</a>
@@ -133,18 +139,18 @@
         <div class="about-content">
           <div class="about-text">
             <p class="lead">
-              I'm a passionate Data Scientist with expertise in machine learning, statistical analysis, 
-              and data visualization. I specialize in turning complex datasets into meaningful insights 
-              that drive business decisions.
+              I'm a data professional with hands-on experience across the full data lifecycle — data
+              engineering, analytics, and machine learning. I specialize in turning complex datasets
+              into meaningful insights and reliable, scalable systems that drive business decisions.
             </p>
             <p>
-              With a strong foundation in Python, SQL, and various data science tools, I've worked on 
-              projects ranging from predictive modeling to business intelligence dashboards. I'm 
-              constantly learning and staying updated with the latest trends in data science and AI.
+              With a strong foundation in Python, SQL, and modern data tooling, I've worked on projects
+              ranging from ETL pipelines and BI dashboards to predictive models and ML systems. I'm
+              constantly learning and staying current with trends across data engineering, analytics, and AI.
             </p>
             <p>
-              Currently seeking opportunities in data science and analytics where I can leverage my 
-              skills to solve challenging problems and contribute to data-driven decision making.
+              Currently seeking Data Analyst, Data Engineer, or Data Scientist opportunities where I can
+              leverage my skills to solve challenging problems and contribute to data-driven decision making.
             </p>
             <div class="about-stats">
               <div class="stat-item">
@@ -156,8 +162,8 @@
                 <span class="stat-label">Data Solutions</span>
               </div>
               <div class="stat-item">
-                <span class="stat-number" id="visitor-count">0</span>
-                <span class="stat-label">Website Visitors</span>
+                <span class="stat-number">2</span>
+                <span class="stat-label">Certifications</span>
               </div>
             </div>
           </div>
@@ -199,6 +205,20 @@
                   <div class="skill-progress" data-width="75"></div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h3 class="skill-category-title">
+              <i class="fas fa-database"></i> Data Engineering
+            </h3>
+            <div class="skill-tags">
+              <span class="skill-tag">ETL/ELT Pipelines</span>
+              <span class="skill-tag">Data Warehousing</span>
+              <span class="skill-tag">Data Modeling</span>
+              <span class="skill-tag">Pipeline Automation</span>
+              <span class="skill-tag">Cloud Data Platforms</span>
+              <span class="skill-tag">Big Data Processing</span>
             </div>
           </div>
 
@@ -253,16 +273,6 @@
         <div class="projects-grid">
           <div class="project-card">
             <div class="project-image">
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link" title="View Project">
-                    <i class="fas fa-external-link-alt"></i>
-                  </a>
-                  <a href="#" class="project-link" title="View Code">
-                    <i class="fab fa-github"></i>
-                  </a>
-                </div>
-              </div>
               <div class="project-placeholder">
                 <i class="fas fa-user-slash"></i>
               </div>
@@ -284,16 +294,6 @@
 
           <div class="project-card">
             <div class="project-image">
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link" title="View Project">
-                    <i class="fas fa-external-link-alt"></i>
-                  </a>
-                  <a href="#" class="project-link" title="View Code">
-                    <i class="fab fa-github"></i>
-                  </a>
-                </div>
-              </div>
               <div class="project-placeholder">
                 <i class="fas fa-bullseye"></i>
               </div>
@@ -315,16 +315,6 @@
 
           <div class="project-card">
             <div class="project-image">
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link" title="View Project">
-                    <i class="fas fa-external-link-alt"></i>
-                  </a>
-                  <a href="#" class="project-link" title="View Code">
-                    <i class="fab fa-github"></i>
-                  </a>
-                </div>
-              </div>
               <div class="project-placeholder">
                 <i class="fas fa-users"></i>
               </div>
@@ -346,16 +336,6 @@
 
           <div class="project-card">
             <div class="project-image">
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link" title="View Project">
-                    <i class="fas fa-external-link-alt"></i>
-                  </a>
-                  <a href="#" class="project-link" title="View Code">
-                    <i class="fab fa-github"></i>
-                  </a>
-                </div>
-              </div>
               <div class="project-placeholder">
                 <i class="fas fa-brain"></i>
               </div>
@@ -377,16 +357,6 @@
 
           <div class="project-card">
             <div class="project-image">
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link" title="View Project">
-                    <i class="fas fa-external-link-alt"></i>
-                  </a>
-                  <a href="#" class="project-link" title="View Code">
-                    <i class="fab fa-github"></i>
-                  </a>
-                </div>
-              </div>
               <div class="project-placeholder">
                 <i class="fas fa-robot"></i>
               </div>
@@ -408,16 +378,6 @@
 
           <div class="project-card">
             <div class="project-image">
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link" title="View Project">
-                    <i class="fas fa-external-link-alt"></i>
-                  </a>
-                  <a href="#" class="project-link" title="View Code">
-                    <i class="fab fa-github"></i>
-                  </a>
-                </div>
-              </div>
               <div class="project-placeholder">
                 <i class="fas fa-lightbulb"></i>
               </div>
@@ -440,16 +400,6 @@
 
           <div class="project-card">
             <div class="project-image">
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link" title="View Project">
-                    <i class="fas fa-external-link-alt"></i>
-                  </a>
-                  <a href="#" class="project-link" title="View Code">
-                    <i class="fab fa-github"></i>
-        </a>
-      </div>
-              </div>
               <div class="project-placeholder">
                 <i class="fas fa-chart-line"></i>
               </div>
@@ -598,7 +548,7 @@
       <div class="container">
         <h2 class="section-title">Get In Touch</h2>
         <p class="contact-subtitle">
-          I'm currently looking for opportunities in data science and analytics. 
+          I'm currently looking for Data Analyst, Data Engineer, or Data Scientist opportunities.
           Feel free to reach out if you'd like to collaborate or discuss potential opportunities.
         </p>
         <div class="contact-content">
@@ -660,7 +610,7 @@
     <footer class="footer">
       <div class="container">
         <p>&copy; 2024 Sandesh Thapa. All rights reserved.</p>
-        <p>Built with passion for data science and analytics</p>
+        <p>Built with passion for data, analytics, and engineering</p>
       </div>
     </footer>
 
@@ -670,9 +620,9 @@
         <div class="cookie-text">
           <i class="fas fa-info-circle"></i>
           <p>
-            <strong>Privacy Notice:</strong> This website uses Google Analytics to track visitor traffic 
-            and improve user experience. Your visit is being tracked anonymously to understand website 
-            usage patterns. You can view the analytics dashboard to see visitor statistics. 
+            <strong>Privacy Notice:</strong> This website uses Google Analytics to understand visitor
+            traffic and improve user experience. No tracking occurs unless you accept below, and your
+            IP address is anonymized.
             <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Learn more about our privacy practices</a>.
           </p>
         </div>

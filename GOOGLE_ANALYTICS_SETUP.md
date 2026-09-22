@@ -10,9 +10,11 @@
 
 ## Step 2: Update the Measurement ID in Your Code
 
+**Already configured** with Measurement ID `G-HHMRX6ZBCR`. If you ever need to change it:
+
 1. Open `dist/index.html`
-2. Find the Google Analytics script section (around line 33-44)
-3. Replace `G-XXXXXXXXXX` with your actual Measurement ID in **two places**:
+2. Find the Google Analytics `<script>` block in `<head>` (search for the current ID)
+3. Replace it with your new Measurement ID in **two places**:
    - In the script src URL: `https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX`
    - In the gtag config: `gtag('config', 'G-XXXXXXXXXX', ...)`
 
@@ -23,6 +25,10 @@ Example:
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
+  // Keep this consent default — it's what makes tracking actually opt-in.
+  gtag('consent', 'default', {
+    'analytics_storage': 'denied'
+  });
   gtag('config', 'G-ABC123XYZ', {
     'anonymize_ip': true,
     'cookie_flags': 'SameSite=None;Secure'
@@ -39,19 +45,29 @@ Example:
 
 ## Features Implemented
 
-✅ **Visitor Tracking**: Google Analytics tracks all page views and user interactions
-✅ **Cookie Consent**: Users can accept or decline tracking
-✅ **Visitor Count Display**: Shows approximate visitor count on the About page
+✅ **Visitor Tracking**: Google Analytics tracks page views and user interactions, once consented
+✅ **Cookie Consent**: Users can accept or decline tracking via the banner
+✅ **Consent Mode**: Analytics storage defaults to `denied`; nothing is sent to Google until the
+  visitor clicks Accept
 ✅ **Privacy Compliant**: IP anonymization enabled, cookie consent banner included
 
-## How Visitor Count Works
+## How Consent Gating Works
 
-The visitor count displayed on the website uses localStorage to track unique daily visits. This is a simple approximation. For accurate analytics, check your Google Analytics dashboard.
+`dist/index.html` calls `gtag('consent', 'default', { analytics_storage: 'denied' })` before
+`gtag('config', ...)` loads, so Google Analytics collects nothing by default. In
+`dist/js/main.js`:
+- Clicking **Accept** calls `gtag('consent', 'update', { analytics_storage: 'granted' })` and
+  fires an explicit `page_view` event.
+- Clicking **Decline** leaves storage denied (no action needed — that's already the default).
+- On a later visit, if `localStorage.cookiesAccepted === 'true'` from a prior session, consent is
+  re-granted automatically on page load (Consent Mode doesn't persist "granted" across reloads by
+  itself).
 
 ## Privacy & Compliance
 
 - IP addresses are anonymized
-- Cookie consent banner allows users to opt-out
-- Tracking only occurs after user consent
-- Complies with GDPR and privacy regulations
+- Cookie consent banner allows users to opt-in or decline
+- Tracking only occurs after explicit user consent (enforced via Google Consent Mode, not just by
+  convention)
+- Consistent with GDPR-style consent-before-tracking practice
 
