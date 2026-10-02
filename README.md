@@ -10,7 +10,7 @@ analytics, data engineering, and data science.
 - ⚡ Fast loading with optimized assets
 - 🎯 SEO optimized with meta tags
 - 🌈 Beautiful gradient effects and transitions
-- 📊 Sections for: About, Skills, Projects, Experience, Contact
+- 📊 Sections for: About, Skills, Projects, Blog, Certifications, Experience, Contact
 
 ## Tech Stack
 
@@ -80,6 +80,36 @@ This project includes a GitHub Actions workflow for automatic deployment:
 
 See `DEPLOYMENT.md` for deployment instructions.
 
+## Blog
+
+A static blog lives at `dist/blog/`, linked from the main nav (`Blog`). There's no CMS or backend
+— each post is a hand-built, self-contained HTML page that reuses the main site's `css/main.css`,
+`js/main.js`, nav, and footer, so it looks and behaves like the rest of the site.
+
+```
+dist/blog/
+├── index.html                              # Listing page: filter bar + post cards
+└── <post-slug>.html                        # One file per post
+```
+
+**Workflow for adding a new post** (the one in use today):
+
+1. Draft the post as a Claude Docs page (headings, tables, lists, charts — whatever it needs).
+2. Share the doc's `claude.ai/artifact/...` link in a Claude Code conversation in this repo and
+   ask for it to be published as a new blog post.
+3. Claude reads the doc via the Claude Docs connector, converts it to a new
+   `dist/blog/<slug>.html` page (any embedded charts get redrawn as static inline SVG, in the
+   site's own color palette — see `scss/_blog.scss` for the chart tokens), and adds a card for it
+   to `dist/blog/index.html`.
+4. If it's a new topic, add a new `data-filter` button to the filter bar in `dist/blog/index.html`
+   (`.blog-filter-bar`) and tag the new post's card with a matching `data-category`.
+
+To add a post manually instead: copy an existing post file as a template, keep the
+`<nav>`/`<footer>`/cookie-banner/GA `<script>` blocks identical to the other pages (paths are
+relative — `../css/main.css`, `../js/main.js`, `../index.html#about`, etc., since posts live one
+directory down from the site root), and add a matching `<article class="blog-card">` to
+`dist/blog/index.html`'s `.blog-grid`.
+
 ## Customization
 
 ### Update Personal Information
@@ -135,15 +165,20 @@ See `DEPLOYMENT.md` for deployment instructions.
 ```
 sandesh_portfolio/
 ├── dist/                 # Production files
+│   ├── blog/
+│   │   ├── index.html   # Blog listing page
+│   │   └── *.html       # One file per post
 │   ├── css/
 │   │   └── main.css     # Compiled CSS
 │   ├── img/             # Images
 │   ├── js/
-│   │   └── main.js      # JavaScript
+│   │   ├── main.js      # Shared site JavaScript (nav, GA consent, cookie banner, etc.)
+│   │   └── blog.js      # Blog listing filter (only loaded by dist/blog/index.html)
 │   └── index.html       # Main HTML file
 ├── scss/                # Source SCSS files
-│   ├── _config.scss     # Variables and mixins
-│   └── main.scss        # Main stylesheet
+│   ├── _config.scss     # Variables, mixins, chart color tokens
+│   ├── _blog.scss       # Blog listing + post page + chart figure styles
+│   └── main.scss        # Main stylesheet (imports the above)
 ├── package.json         # Dependencies
 └── README.md           # This file
 ```

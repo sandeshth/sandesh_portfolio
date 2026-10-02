@@ -1,0 +1,313 @@
+@use 'config' as *;
+
+// Shared page header for blog index + post pages (not a full-height hero —
+// these are secondary pages, just enough to clear the fixed navbar)
+.page-header {
+  padding: 140px 0 $spacing-lg;
+  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+  text-align: center;
+
+  @media (max-width: $breakpoint-md) {
+    padding: 120px 0 $spacing-md;
+  }
+}
+
+.page-header-title {
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin-bottom: $spacing-sm;
+
+  @media (max-width: $breakpoint-md) {
+    font-size: 2rem;
+  }
+}
+
+.page-header-subtitle {
+  font-size: 1.1rem;
+  color: $text-secondary;
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  color: $highlight-color;
+  text-decoration: none;
+  font-weight: 500;
+  margin-bottom: $spacing-md;
+  @include transition();
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+// Blog listing page
+.blog-listing {
+  padding: $spacing-xl 0;
+  background: $primary-color;
+}
+
+.blog-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  justify-content: center;
+  margin-bottom: $spacing-lg;
+}
+
+.blog-filter-btn {
+  padding: 0.5rem 1.25rem;
+  border-radius: 20px;
+  border: 1px solid rgba($highlight-color, 0.3);
+  background: transparent;
+  color: $text-secondary;
+  font-family: $font-primary;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  @include transition();
+
+  &:hover {
+    border-color: $highlight-color;
+    color: $highlight-color;
+  }
+
+  &.active {
+    background: rgba($highlight-color, 0.15);
+    border-color: $highlight-color;
+    color: $highlight-color;
+  }
+}
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: $spacing-lg;
+}
+
+.blog-card {
+  background: rgba($secondary-color, 0.5);
+  border-radius: 15px;
+  padding: $spacing-lg;
+  @include box-shadow(2);
+  @include transition();
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-5px);
+    @include box-shadow(3);
+  }
+
+  &.is-hidden {
+    display: none;
+  }
+}
+
+.blog-card-tag {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.3rem 0.8rem;
+  background: rgba($highlight-color, 0.1);
+  color: $highlight-color;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  margin-bottom: $spacing-sm;
+}
+
+.blog-card-title {
+  font-size: 1.4rem;
+  margin-bottom: $spacing-xs;
+  color: $text-primary;
+}
+
+.blog-card-meta {
+  color: $text-secondary;
+  font-size: 0.85rem;
+  margin-bottom: $spacing-sm;
+}
+
+.blog-card-excerpt {
+  color: $text-secondary;
+  line-height: 1.7;
+  margin-bottom: $spacing-md;
+  flex-grow: 1;
+}
+
+.blog-read-link {
+  color: $highlight-color;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  @include transition();
+
+  i {
+    font-size: 0.85rem;
+    @include transition(transform);
+  }
+
+  &:hover i {
+    transform: translateX(4px);
+  }
+}
+
+// Individual post page
+.post {
+  padding: $spacing-xl 0;
+  background: $primary-color;
+}
+
+.post-container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+
+  @media (max-width: $breakpoint-md) {
+    padding: 0 $spacing-sm;
+  }
+}
+
+.post-header {
+  margin-bottom: $spacing-lg;
+}
+
+.post-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: $spacing-sm;
+
+  @media (max-width: $breakpoint-md) {
+    font-size: 1.7rem;
+  }
+}
+
+.post-subtitle {
+  font-size: 1.15rem;
+  color: $highlight-color;
+  font-style: italic;
+  margin-bottom: $spacing-sm;
+}
+
+.post-meta {
+  color: $text-secondary;
+  font-size: 0.9rem;
+}
+
+.post-content {
+  color: $text-secondary;
+  font-size: 1.05rem;
+  line-height: 1.85;
+
+  h2 {
+    color: $highlight-color;
+    font-size: 1.6rem;
+    margin: $spacing-xl 0 $spacing-md;
+
+    @media (max-width: $breakpoint-md) {
+      font-size: 1.35rem;
+    }
+  }
+
+  p {
+    margin-bottom: $spacing-md;
+  }
+
+  strong {
+    color: $text-primary;
+  }
+
+  em {
+    color: $text-primary;
+  }
+
+  ul,
+  ol {
+    margin: 0 0 $spacing-md $spacing-md;
+
+    li {
+      margin-bottom: $spacing-xs;
+    }
+  }
+
+  a {
+    color: $highlight-color;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: $spacing-md;
+    font-size: 0.95rem;
+
+    th,
+    td {
+      padding: 0.6rem 0.9rem;
+      border: 1px solid rgba($text-secondary, 0.2);
+      text-align: left;
+    }
+
+    th {
+      background: rgba($highlight-color, 0.1);
+      color: $highlight-color;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) td {
+      background: rgba($secondary-color, 0.3);
+    }
+  }
+
+  code {
+    font-family: monospace;
+    background: rgba($secondary-color, 0.5);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  pre {
+    background: rgba($secondary-color, 0.5);
+    padding: $spacing-md;
+    border-radius: 10px;
+    overflow-x: auto;
+    margin-bottom: $spacing-md;
+
+    code {
+      background: none;
+      padding: 0;
+    }
+  }
+}
+
+.post-figure {
+  margin: $spacing-lg 0;
+  background: rgba($secondary-color, 0.4);
+  border-radius: 15px;
+  padding: $spacing-md;
+
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  figcaption {
+    text-align: center;
+    color: $text-secondary;
+    font-size: 0.85rem;
+    margin-top: $spacing-sm;
+    font-style: italic;
+  }
+}
+
+.post-footer-nav {
+  margin-top: $spacing-xl;
+  padding-top: $spacing-lg;
+  border-top: 1px solid rgba($text-secondary, 0.15);
+}

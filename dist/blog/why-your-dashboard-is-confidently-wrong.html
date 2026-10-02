@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="description" content="A beginner's guide to causal inference in 10 plain-English steps: correlation vs. causation, confounders, A/B tests, propensity scores, and more, with made-up data you can check by eye." />
+    <meta name="keywords" content="causal inference, correlation vs causation, confounders, A/B testing, propensity score, difference-in-differences, statistics" />
+    <meta name="author" content="Sandesh Thapa" />
+
+    <!-- Security Headers -->
+    <!-- Note: X-Frame-Options / X-Content-Type-Options / X-XSS-Protection are NOT enforced via <meta>
+         (browsers only honor them as real HTTP response headers). GitHub Pages doesn't let this site
+         set custom response headers, so only CSP and Referrer-Policy below actually take effect. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+                   font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   img-src 'self' data: https:;
+                   connect-src 'self' https://www.google-analytics.com;">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Why Your Dashboard Is Confidently Wrong" />
+    <meta property="og:description" content="A beginner's guide to causal inference in 10 plain-English steps, with made-up data you can check by eye." />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="../css/main.css" />
+    <title>Why Your Dashboard Is Confidently Wrong | Sandesh Thapa</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HHMRX6ZBCR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('consent', 'default', {
+        'analytics_storage': 'denied'
+      });
+      gtag('config', 'G-HHMRX6ZBCR', {
+        'anonymize_ip': true,
+        'cookie_flags': 'SameSite=None;Secure'
+      });
+    </script>
+  </head>
+
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <a href="../index.html#home">ST</a>
+        </div>
+        <ul class="nav-menu" id="nav-menu">
+          <li class="nav-item">
+            <a href="../index.html#home" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="../index.html#about" class="nav-link">About</a>
+          </li>
+          <li class="nav-item">
+            <a href="../index.html#skills" class="nav-link">Skills</a>
+          </li>
+          <li class="nav-item">
+            <a href="../index.html#projects" class="nav-link">Projects</a>
+          </li>
+          <li class="nav-item">
+            <a href="../index.html#certifications" class="nav-link">Certifications</a>
+          </li>
+          <li class="nav-item">
+            <a href="../index.html#experience" class="nav-link">Experience</a>
+          </li>
+          <li class="nav-item">
+            <a href="../index.html#contact" class="nav-link">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a href="index.html" class="nav-link active">Blog</a>
+          </li>
+        </ul>
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Post -->
+    <article class="post">
+      <div class="post-container">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+
+        <header class="post-header">
+          <span class="blog-card-tag">Causal Inference &amp; Statistics</span>
+          <h1 class="post-title">Why Your Dashboard Is Confidently Wrong</h1>
+          <p class="post-subtitle">A beginner's guide to causal inference, in 10 plain-English steps</p>
+          <p class="post-meta">October 2, 2026 · Sandesh Thapa · ~22 min read</p>
+        </header>
+
+        <div class="post-content">
+<h2>The story behind this newsletter</h2>
+<p>A marketing dashboard showed that retargeting ads drove a large share of sales. The catch: those ads were shown mostly to shoppers who were already likely to buy. So the dashboard gave the ads credit for purchases that would have happened anyway.</p>
+<p>That one mistake is the doorway into causal inference: the study of whether X actually <em>causes</em> Y, not just whether they move together. Below are the ten ideas I worked through to understand it, in plain English.</p>
+<p>Each lesson follows the same pattern:</p>
+<ul>
+<li>An everyday story (shops, hospitals, schools, sports)</li>
+<li>A tiny made-up dataset you can check by eye</li>
+<li>One key term, defined in a sentence</li>
+<li>What it means for the retargeting ads</li>
+</ul>
+<p>All numbers are made up for illustration.</p>
+<h2>Lesson 1: Correlation is not causation</h2>
+<p>Two things moving together does not mean one causes the other. Often a hidden third thing is pushing both.</p>
+<p><strong>The story.</strong> A beach-town shop owner writes down her daily ice cream sales and the number of drownings the lifeguard reports. After 10 days, the pattern is clear: big ice cream days are also bad drowning days. Should the town ban ice cream?</p>
+<p>No. Hot days bring more people to buy ice cream <em>and</em> more people into the water. Heat drives both. Ice cream never touches the sea.</p>
+<figure class="post-figure">
+<svg viewBox='0 0 760 370' role='img' aria-label='Ice cream sales and drownings both climb with temperature' fontSize='12'><text x='40' y='30' font-size='15' font-weight='600' fill='#ffffff'>Ice cream sales and drownings both climb with temperature</text><text x='40' y='50' font-size='11.5' fill='#b8b8b8'>10 days, coolest to hottest. Heat drives both; ice cream drives neither.</text><text x='40' y='80' font-weight='600' fill='#ffffff'>Ice creams sold per day</text><rect x='56.0' y='172.0' width='36' height='20.0' fill='rgba(184,184,184,0.45)'><title>12°C: 40 ice creams</title></rect><text x='74.0' y='166.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>40</text><rect x='124.0' y='164.5' width='36' height='27.5' fill='rgba(184,184,184,0.45)'><title>15°C: 55 ice creams</title></rect><text x='142.0' y='158.5' text-anchor='middle' font-size='11' fill='#b8b8b8'>55</text><rect x='192.0' y='157.0' width='36' height='35.0' fill='rgba(184,184,184,0.45)'><title>18°C: 70 ice creams</title></rect><text x='210.0' y='151.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>70</text><rect x='260.0' y='149.5' width='36' height='42.5' fill='rgba(184,184,184,0.45)'><title>20°C: 85 ice creams</title></rect><text x='278.0' y='143.5' text-anchor='middle' font-size='11' fill='#b8b8b8'>85</text><rect x='328.0' y='144.5' width='36' height='47.5' fill='rgba(184,184,184,0.45)'><title>22°C: 95 ice creams</title></rect><text x='346.0' y='138.5' text-anchor='middle' font-size='11' fill='#b8b8b8'>95</text><rect x='396.0' y='132.0' width='36' height='60.0' fill='rgba(184,184,184,0.45)'><title>25°C: 120 ice creams</title></rect><text x='414.0' y='126.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>120</text><rect x='464.0' y='124.5' width='36' height='67.5' fill='rgba(184,184,184,0.45)'><title>27°C: 135 ice creams</title></rect><text x='482.0' y='118.5' text-anchor='middle' font-size='11' fill='#b8b8b8'>135</text><rect x='532.0' y='112.0' width='36' height='80.0' fill='rgba(184,184,184,0.45)'><title>30°C: 160 ice creams</title></rect><text x='550.0' y='106.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>160</text><rect x='600.0' y='104.5' width='36' height='87.5' fill='rgba(184,184,184,0.45)'><title>32°C: 175 ice creams</title></rect><text x='618.0' y='98.5' text-anchor='middle' font-size='11' fill='#b8b8b8'>175</text><rect x='668.0' y='92.0' width='36' height='100.0' fill='rgba(184,184,184,0.45)'><title>35°C: 200 ice creams</title></rect><text x='686.0' y='86.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>200</text><line x1='40' x2='720' y1='192' y2='192' stroke='rgba(184,184,184,0.35)'/><text x='40' y='222' font-weight='600' fill='#ffffff'>Drownings per day</text><rect x='56.0' y='312.0' width='36' height='0.0' fill='rgba(184,184,184,0.45)'><title>12°C: 0 drownings</title></rect><text x='74.0' y='306.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>0</text><rect x='124.0' y='312.0' width='36' height='0.0' fill='rgba(184,184,184,0.45)'><title>15°C: 0 drownings</title></rect><text x='142.0' y='306.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>0</text><rect x='192.0' y='292.0' width='36' height='20.0' fill='rgba(184,184,184,0.45)'><title>18°C: 1 drownings</title></rect><text x='210.0' y='286.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>1</text><rect x='260.0' y='292.0' width='36' height='20.0' fill='rgba(184,184,184,0.45)'><title>20°C: 1 drownings</title></rect><text x='278.0' y='286.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>1</text><rect x='328.0' y='292.0' width='36' height='20.0' fill='rgba(184,184,184,0.45)'><title>22°C: 1 drownings</title></rect><text x='346.0' y='286.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>1</text><rect x='396.0' y='272.0' width='36' height='40.0' fill='rgba(184,184,184,0.45)'><title>25°C: 2 drownings</title></rect><text x='414.0' y='266.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>2</text><rect x='464.0' y='272.0' width='36' height='40.0' fill='rgba(184,184,184,0.45)'><title>27°C: 2 drownings</title></rect><text x='482.0' y='266.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>2</text><rect x='532.0' y='252.0' width='36' height='60.0' fill='rgba(184,184,184,0.45)'><title>30°C: 3 drownings</title></rect><text x='550.0' y='246.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>3</text><rect x='600.0' y='252.0' width='36' height='60.0' fill='rgba(184,184,184,0.45)'><title>32°C: 3 drownings</title></rect><text x='618.0' y='246.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>3</text><rect x='668.0' y='232.0' width='36' height='80.0' fill='rgba(184,184,184,0.45)'><title>35°C: 4 drownings</title></rect><text x='686.0' y='226.0' text-anchor='middle' font-size='11' fill='#b8b8b8'>4</text><line x1='40' x2='720' y1='312' y2='312' stroke='rgba(184,184,184,0.35)'/><text x='74.0' y='332' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>12&#176;</text><text x='142.0' y='332' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>15&#176;</text><text x='210.0' y='332' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>18&#176;</text><text x='278.0' y='332' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>20&#176;</text><text x='346.0' y='332' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>22&#176;</text><text x='414.0' y='332' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>25&#176;</text><text x='482.0' y='332' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>27&#176;</text><text x='550.0' y='332' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>30&#176;</text><text x='618.0' y='332' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>32&#176;</text><text x='686.0' y='332' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>35&#176;</text><text x='380' y='356' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>Temperature (&#176;C)</text></svg>
+<figcaption>made-up data from Lesson 1 · 10 days</figcaption>
+</figure>
+<p><strong>The key term.</strong> <em>Correlation</em> means two things tend to go up and down together. It is easy to spot in data, which is exactly why it is so tempting to misread as cause.</p>
+<p><strong>Strong is not the same as causal.</strong> In a simulated year where ice cream had zero effect on drowning, the correlation between them was 0.46. Make the beach ten times busier, with the same rules, and it rises to 0.82. Ice cream's true effect stayed at zero both times.</p>
+<p>Think of two friends in a car singing the same song. They are not copying each other; they are both following the radio. A loud, clear radio makes them sing perfectly in sync. A crackly one makes them drift. Either way, the strength of the match tells you how in sync they are, not why.</p>
+<p><strong>The ad story.</strong> "People who saw retargeting ads bought a lot" is a correlation. The radio here is how keen a shopper already was to buy.</p>
+<h2>Lesson 2: The "what if" world</h2>
+<p>The true effect of anything is the gap between what happens to a person <em>with</em> it and <em>without</em> it. We only ever get to see one of those.</p>
+<p><strong>The story.</strong> Anna spends $100 at a shop in October. In November she opens a marketing email and spends $150. Did the email add $50?</p>
+<p>Maybe not. November has Black Friday. Anna might have spent $150 anyway. Before-and-after mixes the email up with everything else that changed over time.</p>
+<p>What we really want is two copies of November: one where Anna gets the email, one where the same Anna, in the same month, does not. The email's effect is the difference. But only one of those Novembers ever happens.</p>
+<p><strong>The god's-eye view.</strong> Pretend we could see both worlds for 10 customers:</p>
+<table>
+<thead>
+<tr>
+<th>Customer</th>
+<th>Spend without email</th>
+<th>Spend with email</th>
+<th>True effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Anna</td>
+<td>$100</td>
+<td>$110</td>
+<td>+$10</td>
+</tr>
+<tr>
+<td>Ben</td>
+<td>$10</td>
+<td>$15</td>
+<td>+$5</td>
+</tr>
+<tr>
+<td>Chen</td>
+<td>$90</td>
+<td>$100</td>
+<td>+$10</td>
+</tr>
+<tr>
+<td>Dina</td>
+<td>$20</td>
+<td>$20</td>
+<td>$0</td>
+</tr>
+<tr>
+<td>Eli</td>
+<td>$80</td>
+<td>$95</td>
+<td>+$15</td>
+</tr>
+<tr>
+<td>Fay</td>
+<td>$15</td>
+<td>$20</td>
+<td>+$5</td>
+</tr>
+<tr>
+<td>Gus</td>
+<td>$95</td>
+<td>$105</td>
+<td>+$10</td>
+</tr>
+<tr>
+<td>Hana</td>
+<td>$25</td>
+<td>$35</td>
+<td>+$10</td>
+</tr>
+<tr>
+<td>Ivan</td>
+<td>$85</td>
+<td>$100</td>
+<td>+$15</td>
+</tr>
+<tr>
+<td>Jo</td>
+<td>$30</td>
+<td>$30</td>
+<td>$0</td>
+</tr>
+</tbody>
+</table>
+<p>The email's average true effect is <strong>$8 per customer</strong>.</p>
+<p><strong>What real life shows.</strong> In reality the keen customers (Anna, Chen, Eli, Gus, Ivan) opened the email and the others did not. Each person reveals only one column; the other becomes a question mark. So a dashboard compares the two groups:</p>
+<ul>
+<li>Openers spent $102 on average</li>
+<li>Non-openers spent $20 on average</li>
+<li>Dashboard: "the email adds <strong>$82</strong>!"</li>
+</ul>
+<p>The truth is $8. The dashboard compared keen Anna with unkeen Ben, instead of Anna-with-email against Anna-without-email. Scaled up to 1,000 simulated customers, the same mistake turned a true $8 into a claimed $38.</p>
+<p><strong>The key terms.</strong> <em>Potential outcomes</em> are the two results a person could have: one with the treatment, one without. A <em>counterfactual</em> is the one from the world that did not happen. It is always missing, so almost all of causal inference is about finding a fair stand-in for it.</p>
+<p><strong>The ad story.</strong> The dashboard filled in each shopper's missing "no ad" world with <em>other</em> shoppers who were far less keen. That is why the ads looked so much better than they were.</p>
+<h2>Lesson 3: Confounders and arrow diagrams</h2>
+<p>A confounder is a hidden third thing that causes both X and Y. It can exaggerate an effect, hide it, or even flip it upside down.</p>
+<p><strong>The story.</strong> A health report says people who went to hospital this year were much more likely to die than people who didn't. Are hospitals dangerous?</p>
+<p>Think about who goes to hospital: mostly people who are already seriously ill. Serious illness makes you more likely to go to hospital <em>and</em> more likely to die. It pushes both.</p>
+<figure class="post-figure">
+<svg viewBox='0 0 760 290' role='img' aria-label='A hidden cause pushes both sides, so X and Y move together' fontSize='13'><defs><marker id='dag-arrow' viewBox='0 0 10 10' refX='9' refY='5' markerWidth='6' markerHeight='6' orient='auto-start-reverse'><path d='M0 0L10 5L0 10z' fill='rgba(184,184,184,0.35)'/></marker></defs><text x='24' y='30' font-size='15' font-weight='600' fill='#ffffff'>A hidden cause pushes both sides, so X and Y move together</text><text x='194' y='62' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>Hospital report</text><text x='566' y='62' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>Ad dashboard</text><g fill='none' stroke='rgba(184,184,184,0.35)' stroke-width='1.25'><path d='M154 122L99 188' marker-end='url(#dag-arrow)'/><path d='M234 122L304 188' marker-end='url(#dag-arrow)'/><path d='M174 210H242' stroke-dasharray='4 4' marker-end='url(#dag-arrow)'/><path d='M526 122L471 188' marker-end='url(#dag-arrow)'/><path d='M606 122L676 188' marker-end='url(#dag-arrow)'/><path d='M546 210H614' stroke-dasharray='4 4' marker-end='url(#dag-arrow)'/></g><rect x='109' y='78' width='170' height='44' rx='8' fill='#00d4ff' fill-opacity='0.12' stroke='#00d4ff' stroke-width='2'/><text x='194' y='104' text-anchor='middle' font-weight='600' fill='#ffffff'>Serious illness</text><rect x='24' y='188' width='150' height='44' rx='8' fill='none' stroke='rgba(184,184,184,0.35)' stroke-width='1.25'/><text x='99' y='214' text-anchor='middle' fill='#ffffff'>Went to hospital</text><rect x='244' y='188' width='120' height='44' rx='8' fill='none' stroke='rgba(184,184,184,0.35)' stroke-width='1.25'/><text x='304' y='214' text-anchor='middle' fill='#ffffff'>Died</text><text x='209' y='200' text-anchor='middle' font-size='13' font-weight='600' fill='#b8b8b8'>?</text><rect x='476' y='78' width='180' height='44' rx='8' fill='#00d4ff' fill-opacity='0.12' stroke='#00d4ff' stroke-width='2'/><text x='566' y='104' text-anchor='middle' font-weight='600' fill='#ffffff'>Already keen to buy</text><rect x='396' y='188' width='150' height='44' rx='8' fill='none' stroke='rgba(184,184,184,0.35)' stroke-width='1.25'/><text x='471' y='214' text-anchor='middle' fill='#ffffff'>Saw retargeting ad</text><rect x='616' y='188' width='120' height='44' rx='8' fill='none' stroke='rgba(184,184,184,0.35)' stroke-width='1.25'/><text x='676' y='214' text-anchor='middle' fill='#ffffff'>Bought</text><text x='581' y='200' text-anchor='middle' font-size='13' font-weight='600' fill='#b8b8b8'>?</text><text x='24' y='266' font-size='11.5' fill='#b8b8b8'>Highlighted: the confounder. Dashed: the effect we actually want to measure.</text></svg>
+<figcaption>arrow diagrams · hospital report and ad dashboard</figcaption>
+</figure>
+<p>In both pictures, the two solid arrows alone are enough to make X and Y move together, even if the dashed arrow were zero.</p>
+<p><strong>Ten patients.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Patient</th>
+<th>Illness</th>
+<th>Went to hospital?</th>
+<th>Died?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Amir</td>
+<td>Serious</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Bea</td>
+<td>Serious</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Carl</td>
+<td>Serious</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Dee</td>
+<td>Serious</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Eva</td>
+<td>Serious</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Finn</td>
+<td>Mild</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Gail</td>
+<td>Mild</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Hugo</td>
+<td>Mild</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Isla</td>
+<td>Mild</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Jack</td>
+<td>Mild</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Comparison</th>
+<th>Hospital</th>
+<th>Home</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Everyone (ignoring illness)</td>
+<td>40% died</td>
+<td>20% died</td>
+</tr>
+<tr>
+<td>Seriously ill only</td>
+<td>50% died</td>
+<td>100% died</td>
+</tr>
+<tr>
+<td>Mildly ill only</td>
+<td>0% died</td>
+<td>0% died</td>
+</tr>
+</tbody>
+</table>
+<p>Ignoring illness, hospital looks twice as deadly. Comparing like with like, hospital helps. The confounder didn't just exaggerate the story; it reversed it. A 10,000-patient simulation showed the same thing: 16% vs 4% overall, but half the death rate for hospital patients within each illness group.</p>
+<p><strong>The key terms.</strong> A <em>confounder</em> is a hidden third thing that causes both the treatment and the result. A <em>DAG</em> (directed acyclic graph) is simply an arrow diagram of what causes what, with no arrows looping back in a circle. Drawing one forces you to name the confounders before you trust any number.</p>
+<p><strong>A habit worth building.</strong> When you see X and Y moving together, always ask: what Z could be pushing both? For example, kids who own more books get better grades, but parents who love reading may drive both.</p>
+<p><strong>The ad story.</strong> The confounder is keenness: keen shoppers are more likely to be retargeted and more likely to buy. Here it made the ads look better than they were, but confounders can push numbers in either direction.</p>
+<h2>Lesson 4: Why a coin flip fixes confounding</h2>
+<p>If chance decides who gets the treatment, the two groups end up alike on everything, including things nobody measured.</p>
+<p><strong>The story.</strong> A school wants to know whether a new reading club improves grades. If a teacher picks 50 members, she will naturally pick the keen, hard-working students, who would do well anyway. So the head teacher flips a coin for each of 100 students instead: heads joins, tails doesn't.</p>
+<p>The coin knows nothing about anyone. It can't favour the keen, the clever, or those with book-loving parents.</p>
+<p><strong>Ten students.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Student</th>
+<th>Keen?</th>
+<th>Parents love reading?</th>
+<th>Group</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ava</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Club</td>
+</tr>
+<tr>
+<td>Ben</td>
+<td>No</td>
+<td>No</td>
+<td>No club</td>
+</tr>
+<tr>
+<td>Cara</td>
+<td>Yes</td>
+<td>No</td>
+<td>No club</td>
+</tr>
+<tr>
+<td>Dev</td>
+<td>No</td>
+<td>Yes</td>
+<td>Club</td>
+</tr>
+<tr>
+<td>Ella</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No club</td>
+</tr>
+<tr>
+<td>Finn</td>
+<td>No</td>
+<td>No</td>
+<td>Club</td>
+</tr>
+<tr>
+<td>Gia</td>
+<td>Yes</td>
+<td>No</td>
+<td>Club</td>
+</tr>
+<tr>
+<td>Hal</td>
+<td>No</td>
+<td>No</td>
+<td>No club</td>
+</tr>
+<tr>
+<td>Ivy</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Club</td>
+</tr>
+<tr>
+<td>Jon</td>
+<td>No</td>
+<td>Yes</td>
+<td>No club</td>
+</tr>
+</tbody>
+</table>
+<p>The coin gave the club 3 keen students and the non-club group 2. Not perfect, but far fairer than the teacher's 5 versus 0. And it balanced "parents love reading" (3 vs 2) without anyone thinking about it.</p>
+<p><strong>Bigger is steadier.</strong> Flip 10 coins many times and the share of heads swings anywhere from 10% to 100%. Flip 1,000 coins and it stays between about 45% and 56%. In a group of 5, one extra keen student moves the keen share by 20 points; in a group of 500, by 0.2 points. Luck averages out.</p>
+<p><strong>Does it give the right answer?</strong> In a simulated school where the club truly adds 5 points, a coin-flip comparison landed close to 5. The teacher's hand-picked comparison landed around 20: the real 5 plus 15 points that keen students earn anyway.</p>
+<p><strong>Important: the coin decides the cause, never the result.</strong> In a headache-pill trial, the coin decides who gets the pill, then you watch who gets better. Choosing people by their result (say, 50 buyers and 50 non-buyers) tells you nothing about what caused the buying.</p>
+<p><strong>The key term.</strong> <em>Random assignment</em> means letting chance decide who gets the treatment. Run that way, the study is a <em>randomized experiment</em>, and in a big enough group the only real difference left between the groups is the treatment.</p>
+<p><strong>The ad story.</strong> The cleanest fix: among shoppers who qualify for retargeting, flip a coin. Heads see the ad; tails are held back (a <em>holdout group</em>). Keen shoppers land evenly on both sides, so any gap in buying is the ad's real effect.</p>
+<h2>Lesson 5: Reading an A/B test</h2>
+<p>A bigger sample makes your answer more precise. It does not make it more correct.</p>
+<p><strong>The story.</strong> A café owner flips a coin for each customer: heads, staff offer a free cookie sample; tails, they don't. After 10 customers:</p>
+<table>
+<thead>
+<tr>
+<th>Customer</th>
+<th>Got sample?</th>
+<th>Spent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Yes</td>
+<td>$9</td>
+</tr>
+<tr>
+<td>2</td>
+<td>No</td>
+<td>$6</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Yes</td>
+<td>$7</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Yes</td>
+<td>$11</td>
+</tr>
+<tr>
+<td>5</td>
+<td>No</td>
+<td>$8</td>
+</tr>
+<tr>
+<td>6</td>
+<td>No</td>
+<td>$5</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Yes</td>
+<td>$8</td>
+</tr>
+<tr>
+<td>8</td>
+<td>No</td>
+<td>$7</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Yes</td>
+<td>$10</td>
+</tr>
+<tr>
+<td>10</td>
+<td>No</td>
+<td>$4</td>
+</tr>
+</tbody>
+</table>
+<p>Sample group average: $9. No-sample group: $6. Gap: <strong>$3</strong>. Because a coin chose who got a sample, this gap is a fair estimate.</p>
+<p><strong>Step 1: the difference in means.</strong> One group's average minus the other's. In a coin-flip test, that single subtraction is your estimate of the effect.</p>
+<p><strong>Step 2: how much does it wobble?</strong> Run the same 10-customer test on three days and you might get $3.00, $0.40 and $5.20. Same café, same cookie, different luck. An honest statement is a range: "probably somewhere between $0 and $6." With 1,000 customers, one simulated test gave $2.87, likely between $2.49 and $3.25, neatly containing the true $3.</p>
+<p>A <em>confidence interval</em> is that range: where the true effect probably lies, given the luck in your sample. Wide means "we don't know much yet"; narrow means "we've pinned it down." A range that includes zero can't even tell you whether the treatment helps or hurts.</p>
+<p><strong>Step 3: the twist.</strong> Now drop the coin. Go back to the ad dashboard, where keen shoppers were more likely to see ads, and the ad truly adds $3. Collect more and more data:</p>
+<figure class="post-figure">
+<svg viewBox='0 0 760 312' role='img' aria-label="More data narrowed the dashboard range around $13, never the true $3" fontSize='12'><text x='40' y='30' font-size='15' font-weight='600' fill='#ffffff'>More data narrowed the dashboard range around $13, never the true $3</text><text x='40' y='50' font-size='11.5' fill='#b8b8b8'>Estimate (dot) and confidence interval (line) for the ad's effect per shopper</text><line x1='272.0' x2='272.0' y1='84' y2='262' stroke='rgba(184,184,184,0.15)'/><text x='272.0' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>$0</text><line x1='343.3' x2='343.3' y1='84' y2='262' stroke='rgba(184,184,184,0.15)'/><text x='343.3' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>$3</text><line x1='414.7' x2='414.7' y1='84' y2='262' stroke='rgba(184,184,184,0.15)'/><text x='414.7' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>$6</text><line x1='486.0' x2='486.0' y1='84' y2='262' stroke='rgba(184,184,184,0.15)'/><text x='486.0' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>$9</text><line x1='557.3' x2='557.3' y1='84' y2='262' stroke='rgba(184,184,184,0.15)'/><text x='557.3' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>$12</text><line x1='628.7' x2='628.7' y1='84' y2='262' stroke='rgba(184,184,184,0.15)'/><text x='628.7' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>$15</text><line x1='700.0' x2='700.0' y1='84' y2='262' stroke='rgba(184,184,184,0.15)'/><text x='700.0' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>$18</text><text x='486' y='300' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>Estimated effect per shopper</text><line x1='343.3' x2='343.3' y1='76' y2='262' stroke='#ff6b6b' stroke-width='1.25' stroke-dasharray='4 4'/><text x='349.3' y='78' font-size='11.5' fill='#b8b8b8'>True effect: $3</text><text x='40' y='114' fill='#ffffff'>Dashboard, 100 shoppers</text><line x1='541.2' x2='687.9' y1='110' y2='110' stroke='#00d4ff' stroke-width='2'/><line x1='541.2' x2='541.2' y1='104' y2='116' stroke='#00d4ff' stroke-width='2'/><line x1='687.9' x2='687.9' y1='104' y2='116' stroke='#00d4ff' stroke-width='2'/><circle cx='614.4' cy='110' r='5' fill='#00d4ff'><title>Dashboard, 100 shoppers: $14.40 ($11.32 to $17.49)</title></circle><text x='614.4' y='98' text-anchor='middle' font-size='11' fill='#b8b8b8'>$14.40 ($11.32 to $17.49)</text><text x='40' y='158' fill='#ffffff'>Dashboard, 10,000 shoppers</text><line x1='569.9' x2='586.6' y1='154' y2='154' stroke='#00d4ff' stroke-width='2'/><line x1='569.9' x2='569.9' y1='148' y2='160' stroke='#00d4ff' stroke-width='2'/><line x1='586.6' x2='586.6' y1='148' y2='160' stroke='#00d4ff' stroke-width='2'/><circle cx='578.3' cy='154' r='5' fill='#00d4ff'><title>Dashboard, 10,000 shoppers: $12.88 ($12.53 to $13.23)</title></circle><text x='578.3' y='142' text-anchor='middle' font-size='11' fill='#b8b8b8'>$12.88 ($12.53 to $13.23)</text><text x='40' y='202' fill='#ffffff'>Dashboard, 1,000,000 shoppers</text><line x1='579.9' x2='581.6' y1='198' y2='198' stroke='#00d4ff' stroke-width='2'/><line x1='579.9' x2='579.9' y1='192' y2='204' stroke='#00d4ff' stroke-width='2'/><line x1='581.6' x2='581.6' y1='192' y2='204' stroke='#00d4ff' stroke-width='2'/><circle cx='580.9' cy='198' r='5' fill='#00d4ff'><title>Dashboard, 1,000,000 shoppers: $12.99 ($12.95 to $13.02)</title></circle><text x='580.9' y='186' text-anchor='middle' font-size='11' fill='#b8b8b8'>$12.99 ($12.95 to $13.02)</text><text x='40' y='246' fill='#ffffff'>Coin-flip test, 1,000 customers</text><line x1='331.2' x2='349.3' y1='242' y2='242' stroke='rgba(184,184,184,0.45)' stroke-width='2'/><line x1='331.2' x2='331.2' y1='236' y2='248' stroke='rgba(184,184,184,0.45)' stroke-width='2'/><line x1='349.3' x2='349.3' y1='236' y2='248' stroke='rgba(184,184,184,0.45)' stroke-width='2'/><circle cx='340.2' cy='242' r='5' fill='rgba(184,184,184,0.45)'><title>Coin-flip test, 1,000 customers: $2.87 ($2.49 to $3.25)</title></circle><text x='359.3' y='246' text-anchor='start' font-size='11' fill='#b8b8b8'>$2.87 ($2.49 to $3.25)</text></svg>
+<figcaption>simulated results from Lesson 5 · one run per sample size</figcaption>
+</figure>
+<p>The range shrank from about $6 wide to $0.07 wide, but it narrowed around <strong>$13</strong>, never the true $3. A million shoppers made the dashboard extremely precise, and still wrong.</p>
+<p>Think of a bathroom scale that reads 5 kg too heavy. Weigh yourself a thousand times and you'll know the wrong number very precisely. More weighing fixes random wobble, not a broken scale.</p>
+<p><strong>The key term.</strong> <em>Bias</em> is a mistake that pushes your answer the same way every time, however much data you collect. A confidence interval protects you from luck, never from bias.</p>
+<p><strong>The ad story.</strong> The dashboard probably had data on huge numbers of shoppers, so its numbers looked rock-solid. But it was measuring "ad + keenness", very precisely.</p>
+<h2>Lesson 6: Adjusting for a confounder you can see</h2>
+<p>When the confounder is in your data, compare like with like and it can no longer fool you.</p>
+<p><strong>The story.</strong> A running club notices that runners who take energy gels finish much faster. But experienced runners use gels more, and experienced runners are faster anyway. Nobody flipped a coin, but the club does record each runner's experience.</p>
+<p><strong>Ten runners</strong> (10 km finish times, lower is faster):</p>
+<table>
+<thead>
+<tr>
+<th>Runner</th>
+<th>Experience</th>
+<th>Gels?</th>
+<th>Time (min)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ana</td>
+<td>Experienced</td>
+<td>Yes</td>
+<td>46</td>
+</tr>
+<tr>
+<td>Bo</td>
+<td>Experienced</td>
+<td>Yes</td>
+<td>45</td>
+</tr>
+<tr>
+<td>Cy</td>
+<td>Experienced</td>
+<td>Yes</td>
+<td>47</td>
+</tr>
+<tr>
+<td>Di</td>
+<td>Experienced</td>
+<td>Yes</td>
+<td>46</td>
+</tr>
+<tr>
+<td>Ed</td>
+<td>Experienced</td>
+<td>No</td>
+<td>48</td>
+</tr>
+<tr>
+<td>Flo</td>
+<td>Beginner</td>
+<td>Yes</td>
+<td>58</td>
+</tr>
+<tr>
+<td>Gil</td>
+<td>Beginner</td>
+<td>No</td>
+<td>60</td>
+</tr>
+<tr>
+<td>Hu</td>
+<td>Beginner</td>
+<td>No</td>
+<td>61</td>
+</tr>
+<tr>
+<td>Ina</td>
+<td>Beginner</td>
+<td>No</td>
+<td>59</td>
+</tr>
+<tr>
+<td>Jay</td>
+<td>Beginner</td>
+<td>No</td>
+<td>60</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Comparison</th>
+<th>Gels make you faster by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Everyone (ignoring experience)</td>
+<td>9.2 minutes</td>
+</tr>
+<tr>
+<td>Experienced vs experienced</td>
+<td>2 minutes</td>
+</tr>
+<tr>
+<td>Beginner vs beginner</td>
+<td>2 minutes</td>
+</tr>
+</tbody>
+</table>
+<p>Gels help, by about 2 minutes. The other 7.2 minutes were experience. Inside each group, everyone has the same experience, so experience can't create the gap.</p>
+<p><strong>Two ways to adjust.</strong></p>
+<ol>
+<li><em>Stratifying</em>: split the data into groups where the confounder is the same, compare inside each group, then combine the answers weighted by group size. On 2,000 simulated runners, this gave 2.1 minutes against a true 2.</li>
+<li><em>Regression</em>: tell the computer "finish time depends on gels <strong>and</strong> experience" and let it work out each one's effect while holding the other steady. Ignoring experience gave about 9 minutes; including it recovered about 2 for gels and 12 for experience, the exact rules of the simulation. This is what people mean when they say they "controlled for" or "adjusted for" something, and it scales to many confounders at once.</li>
+</ol>
+<p><strong>A quick test of the idea.</strong> Coffee drinkers seem to live shorter lives, but after adjusting for smoking the difference disappears. That suggests smoking was the confounder, not coffee.</p>
+<p><strong>The ad story.</strong> The company can stratify or run a regression on "bought" using "saw ad" plus website visits and cart adds. That separates the ad's effect from the part of keenness those columns capture.</p>
+<h2>Lesson 7: When the confounder is hidden</h2>
+<p>You can only adjust for what you can see. A confounder that isn't in your data stays in your answer, and the numbers give no warning.</p>
+<p><strong>The story.</strong> A second running club asks the same question, but it never recorded experience. Experience is still real, still pushing both gel use and finish times. It just isn't written down.</p>
+<p>With only "gels" and "time" columns, there is no way to split runners into beginners and experienced. Guessing experience from finish times doesn't work either: time is the very result we are studying, and gels affect it. The only comparison left is the naive one: 9.2 minutes, when the truth is 2. And the wrong number looks just as believable as the right one did.</p>
+<p><strong>Three cases, same 2,000 simulated runners.</strong></p>
+<table>
+<thead>
+<tr>
+<th>What the club recorded</th>
+<th>Estimated effect of gels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Experience, accurately</td>
+<td>About 2 minutes (correct)</td>
+</tr>
+<tr>
+<td>A rough clue, such as races logged in an app</td>
+<td>In between: some bias removed, not all</td>
+</tr>
+<tr>
+<td>Nothing about experience</td>
+<td>About 9 minutes (badly wrong)</td>
+</tr>
+</tbody>
+</table>
+<p>Why does a rough clue only half-work? It is a blurry photo of experience. Two runners with the same clue can still differ in real experience, so regression thinks it is comparing like with like when it isn't quite.</p>
+<p>An everyday picture: a teacher gives extra exam time to students she <em>knows</em> have a broken arm. A student who quietly has a broken finger gets nothing. She can only be fair about what she knows.</p>
+<p><strong>The key term.</strong> An <em>unmeasured confounder</em> exists but isn't in your data. No amount of stratifying or regression can remove it.</p>
+<p><strong>The question to ask any "we adjusted for X" claim:</strong> what did you <em>not</em> adjust for? What else could make people both get the treatment and have the result, that isn't in the data?</p>
+<p><strong>The ad story.</strong> Website visits and cart adds are rough clues to keenness. Payday, a birthday coming up, or a friend's recommendation are never recorded. Adjusting shrinks the dashboard's over-credit but probably doesn't remove it. A coin-flip holdout test (Lesson 4) has no such problem, because the coin balances hidden things too.</p>
+<h2>Lesson 8: Propensity scores, or finding look-alikes</h2>
+<p>For each person who got the treatment, find someone who had the same chance of getting it but didn't. Each pair is a small, fair comparison.</p>
+<p><strong>The story.</strong> A gym offers a personal-trainer program. Members who sign up lose more weight, but they also tend to be more motivated, visit more, and have set a goal. The manager pairs each sign-up with a look-alike who didn't sign up: Maya (signed up, age 30, 3 visits a week, has a goal) lost 8 kg; Lena (didn't, same age, visits and goal) lost 5 kg. For that pair, the trainer looks worth about 3 kg.</p>
+<p><strong>The problem with many details.</strong> Matching on 3 things is easy. Matching on 20 (age, visits, goals, history, location…) is nearly impossible: most people would have no exact twin.</p>
+<p><strong>The shortcut.</strong> Squash everything into one number: <em>how likely was this person to sign up, given everything we know?</em> Two people with the same chance were pushed toward signing up equally hard by every measured factor. So whether one signed up and the other didn't is, as far as the data can tell, like a coin landing differently. That makes them fair look-alikes, even if their individual details differ.</p>
+<p><strong>Ten gym members.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Chance of signing up</th>
+<th>Signed up?</th>
+<th>Kg lost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Maya</td>
+<td>80%</td>
+<td>Yes</td>
+<td>9</td>
+</tr>
+<tr>
+<td>Tom</td>
+<td>80%</td>
+<td>No</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Kim</td>
+<td>60%</td>
+<td>Yes</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Leo</td>
+<td>60%</td>
+<td>No</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Sam</td>
+<td>40%</td>
+<td>Yes</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Nia</td>
+<td>40%</td>
+<td>No</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Oli</td>
+<td>20%</td>
+<td>No</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Quin</td>
+<td>20%</td>
+<td>No</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Pat</td>
+<td>10%</td>
+<td>No</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Rose</td>
+<td>10%</td>
+<td>No</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>The naive comparison says the trainer adds 4.9 kg (7.0 vs 2.1). Pairing by chance instead: Maya and Tom (gap 3), Kim and Leo (gap 2), Sam and Nia (gap 4). Average: <strong>3 kg</strong>. Oli, Quin, Pat and Rose go unused because nobody who signed up looks like them.</p>
+<p><strong>The key terms.</strong> A <em>propensity score</em> is each person's chance of getting the treatment, worked out from what we know about them. <em>Matching</em> pairs each treated person with an untreated look-alike and averages the gaps.</p>
+<p><strong>Two honest limits.</strong></p>
+<ul>
+<li>Look-alikes only match on what you measured. If motivation was never recorded, two people with the same score can still differ in it. This is Lesson 7's problem again: propensity scores are a smarter way to adjust, not a way around hidden confounders.</li>
+<li>Some people have no look-alike. A super-keen member with a 99% chance of signing up may have nobody similar who didn't.</li>
+</ul>
+<p><strong>The ad story.</strong> Predict each shopper's chance of being retargeted from visits, cart adds and past purchases, then compare retargeted shoppers with look-alikes who weren't. Better than the dashboard, but unrecorded keenness still leaks in, and the keenest shoppers may have no un-retargeted look-alikes at all.</p>
+<h2>Lesson 9: A lucky accident nobody planned</h2>
+<p>Sometimes the world flips a coin for you. If something random decided who got the treatment, you can get a fair answer even with hidden confounders.</p>
+<p><strong>The story.</strong> A popular school has far more applicants than places, so the city hands out places by lottery. The families who apply are all keen, and the hat decides who gets in. Nobody designed an experiment, but comparing lottery winners with lottery losers is just like a coin-flip test: keenness, and every hidden factor, is balanced between the two.</p>
+<p><strong>The twist: not everyone follows the hat.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Kid</th>
+<th>Won lottery?</th>
+<th>Attended?</th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ada</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>82</td>
+</tr>
+<tr>
+<td>Ben</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>78</td>
+</tr>
+<tr>
+<td>Cal</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>85</td>
+</tr>
+<tr>
+<td>Dot</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>80</td>
+</tr>
+<tr>
+<td>Eli</td>
+<td>Yes</td>
+<td>No (moved away)</td>
+<td>70</td>
+</tr>
+<tr>
+<td>Fin</td>
+<td>No</td>
+<td>Yes (waiting list)</td>
+<td>80</td>
+</tr>
+<tr>
+<td>Gus</td>
+<td>No</td>
+<td>No</td>
+<td>70</td>
+</tr>
+<tr>
+<td>Hal</td>
+<td>No</td>
+<td>No</td>
+<td>72</td>
+</tr>
+<tr>
+<td>Ivy</td>
+<td>No</td>
+<td>No</td>
+<td>68</td>
+</tr>
+<tr>
+<td>Jen</td>
+<td>No</td>
+<td>No</td>
+<td>75</td>
+</tr>
+</tbody>
+</table>
+<p>Winners average 79, losers 73: a fair <strong>6-point</strong> gap. But that is the effect of <em>winning</em>, not of <em>attending</em>. Winning raised attendance from 20% to 80%, a 60-point difference, so it only changed the school of about 6 kids in 10. The 6 points are watered down by the 4 whose school didn't change.</p>
+<p><strong>Un-watering the answer.</strong> Divide the lottery's effect on scores by its effect on attendance:</p>
+<pre><code class="language-latex">\text{effect of attending} = \frac{\text{gap in scores}}{\text{gap in attendance}} = \frac{6}{0.6} = 10 \text{ points}
+</code></pre>
+<p>An everyday version: a shop mails coupons to 10 random customers. 6 use it and spend $10 more each; 4 ignore it. That is $60 of extra spending across 10 people, so the mailed group averages $6 more. Dividing $6 by 0.6 gets back to the $10 each coupon user actually added.</p>
+<p>In a 10,000-family simulation with hidden keenness, the lottery raised scores by 5.9 and attendance by 59%. 5.9 ÷ 0.59 = <strong>10.0</strong>, the exact truth, without ever measuring keenness.</p>
+<p><strong>The key terms.</strong> A <em>natural experiment</em> is when something outside anyone's control (a lottery, a rule, a glitch) decides who gets the treatment. An <em>instrumental variable</em> is that lucky accident used to measure the effect, by dividing its effect on the result by its effect on the treatment.</p>
+<p><strong>Three rules the accident must pass.</strong></p>
+<ol>
+<li><strong>It must really be luck.</strong> Nobody can buy extra lottery tickets.</li>
+<li><strong>It must actually nudge the treatment.</strong> Dividing by a tiny nudge gives a wildly unreliable answer.</li>
+<li><strong>No side roads.</strong> The accident must affect the result <em>only</em> through the treatment. Test: could it improve the result for someone who never got the treatment? If a hospital's random shuttle bus driver also gives free health checks, then bus days improve health even for patients who skip physiotherapy, and the answer comes out too big.</li>
+</ol>
+<p><strong>The ad story.</strong> A budget cap or ad-server glitch that stopped retargeting at random could act as a lucky accident. But check rule 3: if the glitch came with a slow website, or budgets ran out on busy sale days, those days differ in a second way and the answer is off.</p>
+<h2>Lesson 10: Before and after, with a twin</h2>
+<p>Compare how much each group <em>changed</em>, not where each group stands. A twin group without the treatment soaks up everything else that changed over time.</p>
+<p><strong>The story.</strong> A bakery owner has two shops in nearby towns. In March she puts a big new sign outside Shop A only. Shop A's sales went from 100 to 130 loaves a day. Did the sign add 30?</p>
+<p>March might have had nicer weather or a school holiday. Shop B, with no sign, shows what "everything else" did:</p>
+<table>
+<thead>
+<tr>
+<th>Shop</th>
+<th>February</th>
+<th>March</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A (new sign)</td>
+<td>100</td>
+<td>130</td>
+<td>+30</td>
+</tr>
+<tr>
+<td>B (no sign)</td>
+<td>80</td>
+<td>100</td>
+<td>+20</td>
+</tr>
+</tbody>
+</table>
+<p>Shop B sells less in both months; that's fine. What matters is that it grew by 20 without a sign. If Shop A would have grown by the same 20, the sign added <strong>30 − 20 = 10 loaves a day</strong>.</p>
+<p><strong>The key terms.</strong> <em>Difference-in-differences</em> does exactly what the name says: take each group's change (the first difference), then subtract one change from the other (the second). It only works under <em>parallel trends</em>: without the treatment, both groups would have moved in step.</p>
+<p><strong>The seesaw rule.</strong> If something unusual happens only to the comparison group, the answer tips the opposite way.</p>
+<ul>
+<li>Road works keep Shop B's customers away → B grows less than it should → the sign looks <strong>better</strong> than it is.</li>
+<li>A festival brings extra customers to Shop B → B grows more than it should → the sign looks <strong>worse</strong> than it is.</li>
+</ul>
+<p>(Percentages are a fair alternative: A grew 30%, B 25%. Whether the season adds the same <em>number</em> of loaves or the same <em>percentage</em> to each shop is a judgment call, and it changes the answer.)</p>
+<p><strong>The ad story.</strong> Suppose retargeting ads switch on in Region A in month 7 but never in a similar Region B. Region A has keener shoppers, and both regions grow steadily through the year. The ads truly add 5 sales a day.</p>
+<figure class="post-figure">
+<svg viewBox='0 0 760 320' role='img' aria-label='After launch, Region A runs 5 sales a day above its parallel path' fontSize='12'><text x='24' y='28' font-size='15' font-weight='600' fill='#ffffff'>After launch, Region A runs 5 sales a day above its parallel path</text><text x='24' y='48' font-size='11.5' fill='#b8b8b8'>Sales per day. Dashed: where Region A would be without ads, parallel to Region B.</text><line x1='70' x2='590' y1='260.0' y2='260.0' stroke='rgba(184,184,184,0.15)'/><text x='60' y='264.0' text-anchor='end' font-size='11.5' fill='#b8b8b8'>80</text><line x1='70' x2='590' y1='208.6' y2='208.6' stroke='rgba(184,184,184,0.15)'/><text x='60' y='212.6' text-anchor='end' font-size='11.5' fill='#b8b8b8'>100</text><line x1='70' x2='590' y1='157.1' y2='157.1' stroke='rgba(184,184,184,0.15)'/><text x='60' y='161.1' text-anchor='end' font-size='11.5' fill='#b8b8b8'>120</text><line x1='70' x2='590' y1='105.7' y2='105.7' stroke='rgba(184,184,184,0.15)'/><text x='60' y='109.7' text-anchor='end' font-size='11.5' fill='#b8b8b8'>140</text><text x='70.0' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>1</text><text x='117.3' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>2</text><text x='164.5' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>3</text><text x='211.8' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>4</text><text x='259.1' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>5</text><text x='306.4' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>6</text><text x='353.6' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>7</text><text x='400.9' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>8</text><text x='448.2' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>9</text><text x='495.5' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>10</text><text x='542.7' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>11</text><text x='590.0' y='280' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>12</text><text x='330' y='302' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>Month</text><line x1='330.0' x2='330.0' y1='70' y2='262' stroke='#ff6b6b' stroke-width='1.25' stroke-dasharray='4 4'/><text x='336.0' y='72' font-size='11.5' fill='#b8b8b8'>Ads switch on in Region A</text><path d='M70.0 229.1L117.3 224.0L164.5 218.9L211.8 213.7L259.1 208.6L306.4 203.4L353.6 198.3L400.9 193.1L448.2 188.0L495.5 182.9L542.7 177.7L590.0 172.6' fill='none' stroke='rgba(184,184,184,0.45)' stroke-width='1.75'/><circle cx='70.0' cy='229.1' r='3' fill='rgba(184,184,184,0.45)'><title>Region B, month 1: 92 sales a day</title></circle><circle cx='117.3' cy='224.0' r='3' fill='rgba(184,184,184,0.45)'><title>Region B, month 2: 94 sales a day</title></circle><circle cx='164.5' cy='218.9' r='3' fill='rgba(184,184,184,0.45)'><title>Region B, month 3: 96 sales a day</title></circle><circle cx='211.8' cy='213.7' r='3' fill='rgba(184,184,184,0.45)'><title>Region B, month 4: 98 sales a day</title></circle><circle cx='259.1' cy='208.6' r='3' fill='rgba(184,184,184,0.45)'><title>Region B, month 5: 100 sales a day</title></circle><circle cx='306.4' cy='203.4' r='3' fill='rgba(184,184,184,0.45)'><title>Region B, month 6: 102 sales a day</title></circle><circle cx='353.6' cy='198.3' r='3' fill='rgba(184,184,184,0.45)'><title>Region B, month 7: 104 sales a day</title></circle><circle cx='400.9' cy='193.1' r='3' fill='rgba(184,184,184,0.45)'><title>Region B, month 8: 106 sales a day</title></circle><circle cx='448.2' cy='188.0' r='3' fill='rgba(184,184,184,0.45)'><title>Region B, month 9: 108 sales a day</title></circle><circle cx='495.5' cy='182.9' r='3' fill='rgba(184,184,184,0.45)'><title>Region B, month 10: 110 sales a day</title></circle><circle cx='542.7' cy='177.7' r='3' fill='rgba(184,184,184,0.45)'><title>Region B, month 11: 112 sales a day</title></circle><circle cx='590.0' cy='172.6' r='3' fill='rgba(184,184,184,0.45)'><title>Region B, month 12: 114 sales a day</title></circle><text x='602' y='180.6' font-size='11.5' fill='#b8b8b8'>Region B</text><path d='M306.4 126.3L353.6 121.1L400.9 116.0L448.2 110.9L495.5 105.7L542.7 100.6L590.0 95.4' fill='none' stroke='rgba(184,184,184,0.45)' stroke-width='1.75' stroke-dasharray='5 4'/><path d='M70.0 152.0L117.3 146.9L164.5 141.7L211.8 136.6L259.1 131.4L306.4 126.3L353.6 108.3L400.9 103.1L448.2 98.0L495.5 92.9L542.7 87.7L590.0 82.6' fill='none' stroke='#00d4ff' stroke-width='2.25'/><circle cx='70.0' cy='152.0' r='3' fill='#00d4ff'><title>Region A, month 1: 122 sales a day</title></circle><circle cx='117.3' cy='146.9' r='3' fill='#00d4ff'><title>Region A, month 2: 124 sales a day</title></circle><circle cx='164.5' cy='141.7' r='3' fill='#00d4ff'><title>Region A, month 3: 126 sales a day</title></circle><circle cx='211.8' cy='136.6' r='3' fill='#00d4ff'><title>Region A, month 4: 128 sales a day</title></circle><circle cx='259.1' cy='131.4' r='3' fill='#00d4ff'><title>Region A, month 5: 130 sales a day</title></circle><circle cx='306.4' cy='126.3' r='3' fill='#00d4ff'><title>Region A, month 6: 132 sales a day</title></circle><circle cx='353.6' cy='108.3' r='3' fill='#00d4ff'><title>Region A, month 7: 139 sales a day</title></circle><circle cx='400.9' cy='103.1' r='3' fill='#00d4ff'><title>Region A, month 8: 141 sales a day</title></circle><circle cx='448.2' cy='98.0' r='3' fill='#00d4ff'><title>Region A, month 9: 143 sales a day</title></circle><circle cx='495.5' cy='92.9' r='3' fill='#00d4ff'><title>Region A, month 10: 145 sales a day</title></circle><circle cx='542.7' cy='87.7' r='3' fill='#00d4ff'><title>Region A, month 11: 147 sales a day</title></circle><circle cx='590.0' cy='82.6' r='3' fill='#00d4ff'><title>Region A, month 12: 149 sales a day</title></circle><text x='602' y='82.6' font-size='11.5' font-weight='600' fill='#ffffff'>Region A</text></svg>
+<figcaption>simulated regions from Lesson 10 · 12 months, noise removed</figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Estimated effect</th>
+<th>Fooled by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Region A vs B after launch</td>
+<td>About 35</td>
+<td>Keenness (A always sells more)</td>
+</tr>
+<tr>
+<td>Region A before vs after</td>
+<td>About 17</td>
+<td>Growth over the year</td>
+</tr>
+<tr>
+<td>Difference-in-differences</td>
+<td>About 5</td>
+<td>Neither</td>
+</tr>
+</tbody>
+</table>
+<p>Keenness is in Region A both before and after, so it cancels out. Growth hits both regions, so Region B soaks it up. Watch for a Christmas market or a sale that hits only one region: that breaks parallel trends.</p>
+<h2>Putting it together: an ad attribution playbook</h2>
+<p>The retargeting dashboard was a naive comparison: it compared shoppers who saw ads with shoppers who didn't, so it credited the ads with buying that keenness would have caused anyway. Because it used huge amounts of data, the wrong number looked rock-solid.</p>
+<p><strong>The ten ideas at a glance.</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Idea</th>
+<th>In one line</th>
+<th>In the ad story</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Correlation ≠ causation</td>
+<td>Moving together may come from a shared hidden cause</td>
+<td>Ads and buying moved together</td>
+</tr>
+<tr>
+<td>2</td>
+<td>The "what if" world</td>
+<td>Effect = same person with vs without; we see only one</td>
+<td>Each shopper's no-ad world is missing</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Confounders</td>
+<td>A hidden cause of both X and Y fakes or flips effects</td>
+<td>Keenness drives both ads and buying</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Coin flips</td>
+<td>Chance balances everything, even the unmeasured</td>
+<td>A holdout group fixes it cleanly</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Reading A/B tests</td>
+<td>Big samples make you precise, not right</td>
+<td>Millions of rows, still biased</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Adjusting</td>
+<td>Compare like with like on what you measured</td>
+<td>Adjust for visits and cart adds</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Hidden confounders</td>
+<td>You can only adjust for what you can see</td>
+<td>Payday and gift plans slip through</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Look-alikes</td>
+<td>Match on the chance of being treated</td>
+<td>Pair retargeted shoppers with similar others</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Lucky accidents</td>
+<td>A random event nudged who got treated</td>
+<td>Budget caps or ad-server glitches</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Difference-in-differences</td>
+<td>Compare changes against a twin group</td>
+<td>Ads in one region, not a similar one</td>
+</tr>
+</tbody>
+</table>
+<p><strong>How to get an honest number, best option first.</strong></p>
+<ol>
+<li><strong>Run a holdout test.</strong> Among shoppers who qualify for retargeting, randomly hold some back from ads. Compare buying, with a confidence interval. This beats every confounder, seen or hidden.</li>
+<li><strong>Look for a lucky accident.</strong> A budget cap or outage that stopped ads at random, as long as it has no side roads to buying.</li>
+<li><strong>Use a twin region or period.</strong> Ads switched on in one place but not a similar one, as long as the two moved in step beforehand.</li>
+<li><strong>As a last resort, adjust.</strong> Regression or look-alike matching on visits, cart adds and past purchases. Expect this to shrink the over-credit, not remove it.</li>
+</ol>
+<p><strong>Four questions to ask any attribution number.</strong></p>
+<ul>
+<li>Who got the treatment, and why them?</li>
+<li>What is the fair stand-in for their "no ad" world?</li>
+<li>Did chance decide, or did something about the person?</li>
+<li>What did we <em>not</em> measure?</li>
+</ul>
+        </div>
+
+        <div class="post-footer-nav">
+          <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2024 Sandesh Thapa. All rights reserved.</p>
+        <p>Built with passion for data, analytics, and engineering</p>
+      </div>
+    </footer>
+
+    <!-- Cookie/Tracking Disclaimer Banner -->
+    <div id="cookie-banner" class="cookie-banner">
+      <div class="cookie-content">
+        <div class="cookie-text">
+          <i class="fas fa-info-circle"></i>
+          <p>
+            <strong>Privacy Notice:</strong> This website uses Google Analytics to understand visitor
+            traffic and improve user experience. No tracking occurs unless you accept below, and your
+            IP address is anonymized.
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Learn more about our privacy practices</a>.
+          </p>
+        </div>
+        <div class="cookie-buttons">
+          <button id="accept-cookies" class="btn-cookie btn-accept">Accept</button>
+          <button id="decline-cookies" class="btn-cookie btn-decline">Decline</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+  </body>
+</html>

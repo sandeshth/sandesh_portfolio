@@ -1,14 +1,23 @@
 // Colors
-$primary-color: #1a1a2e;
-$secondary-color: #0f3460;
-$highlight-color: #00d4ff;
+$primary-color: #0d0f1c;    // ink — primary background
+$secondary-color: #121a2e;  // panel — alternating section background
+$panel-raised: #182544;     // one step up from panel — card/tile surfaces
+$highlight-color: #00d4ff;  // signal — primary accent (shared with blog chart SVGs)
+$mark-color: #ff6b6b;       // mark — single sparing emphasis accent (shared with blog chart SVGs)
 $text-primary: #ffffff;
 $text-secondary: #b8b8b8;
-$gradient-start: #667eea;
-$gradient-end: #764ba2;
+$hairline: rgba($text-secondary, 0.18);
+
+// Chart tokens (used by inline SVG figures in blog posts — scss/_blog.scss)
+$chart-accent: $highlight-color;
+$chart-muted: rgba($text-secondary, 0.45);
+$chart-grid: rgba($text-secondary, 0.15);
+$chart-axis: rgba($text-secondary, 0.35);
+$chart-reference: $mark-color;
 
 // Typography
-$font-primary: 'Poppins', sans-serif;
+$font-primary: 'IBM Plex Sans', sans-serif;
+$font-mono: 'IBM Plex Mono', monospace;
 
 // Spacing
 $spacing-xs: 0.5rem;
@@ -45,9 +54,10 @@ $breakpoint-xl: 1200px;
   }
 }
 
-// Gradient
-@mixin gradient($start: $gradient-start, $end: $gradient-end) {
-  background: linear-gradient(135deg, $start 0%, $end 100%);
+// Dot-grid texture (graph-paper field) — used behind the hero
+@mixin dot-grid($color: rgba($text-secondary, 0.14), $size: 28px) {
+  background-image: radial-gradient($color 1px, transparent 1px);
+  background-size: $size $size;
 }
 
 // Container
