@@ -9,11 +9,15 @@ $text-secondary: #b8b8b8;
 $hairline: rgba($text-secondary, 0.18);
 
 // Chart tokens (used by inline SVG figures in blog posts — scss/_blog.scss)
-$chart-accent: $highlight-color;
+// These are documented here for reference, but each chart SVG hardcodes its own
+// literal hex/rgba values (inline SVG can't read SCSS variables at request time).
+$chart-accent: $highlight-color;        // categorical-1 — primary series
+$chart-categorical-3: #f0b429;          // amber — second comparison series (alongside accent)
 $chart-muted: rgba($text-secondary, 0.45);
 $chart-grid: rgba($text-secondary, 0.15);
 $chart-axis: rgba($text-secondary, 0.35);
 $chart-reference: $mark-color;
+$chart-reference-tint: rgba(255, 107, 107, 0.12); // fill for a reference band (e.g. a credible interval)
 
 // Typography
 $font-primary: 'IBM Plex Sans', sans-serif;

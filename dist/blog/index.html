@@ -38,7 +38,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="../css/main.css" />
     <title>Blog | Sandesh Thapa</title>
@@ -116,12 +116,27 @@
       <div class="container">
         <div class="blog-filter-bar" id="blog-filter-bar">
           <button type="button" class="blog-filter-btn active" data-filter="all">All</button>
-          <button type="button" class="blog-filter-btn" data-filter="causal-inference">Causal Inference &amp; Statistics</button>
+          <button type="button" class="blog-filter-btn" data-filter="causal-inference">Causal Inference</button>
+          <button type="button" class="blog-filter-btn" data-filter="bayesian-statistics">Bayesian Statistics</button>
         </div>
 
         <div class="blog-grid" id="blog-grid">
+          <article class="blog-card" data-category="bayesian-statistics">
+            <span class="blog-card-tag">Bayesian Statistics</span>
+            <h2 class="blog-card-title">The Bayesian Briefing: Everything We Learned, From Rain Clouds to Ad Tests</h2>
+            <p class="blog-card-meta">October 2, 2026 · ~22 min read</p>
+            <p class="blog-card-excerpt">
+              A follow-up to the dashboard post: how to turn "I think the ads work" into "there's a 92%
+              chance they do, and the most likely lift is +20%." Ten lessons on Bayesian thinking —
+              priors, likelihoods, Bayes' rule, credible intervals, Bayesian A/B testing, shrinkage, and
+              deciding under uncertainty — with the same made-up, check-by-eye data and runnable Python.
+            </p>
+            <a href="the-bayesian-briefing.html" class="blog-read-link">
+              Read post <i class="fas fa-arrow-right"></i>
+            </a>
+          </article>
           <article class="blog-card" data-category="causal-inference">
-            <span class="blog-card-tag">Causal Inference &amp; Statistics</span>
+            <span class="blog-card-tag">Causal Inference</span>
             <h2 class="blog-card-title">Why Your Dashboard Is Confidently Wrong</h2>
             <p class="blog-card-meta">October 2, 2026 · ~20 min read</p>
             <p class="blog-card-excerpt">

@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="description" content="Everything we learned about Bayesian statistics, in 10 plain-English lessons: priors, likelihoods, Bayes' rule, credible intervals, Bayesian A/B testing, shrinkage, and deciding under uncertainty — with made-up data and runnable Python." />
+    <meta name="keywords" content="bayesian statistics, bayes rule, prior, posterior, credible interval, bayesian a/b testing, shrinkage, decision theory" />
+    <meta name="author" content="Sandesh Thapa" />
+
+    <!-- Security Headers -->
+    <!-- Note: X-Frame-Options / X-Content-Type-Options / X-XSS-Protection are NOT enforced via <meta>
+         (browsers only honor them as real HTTP response headers). GitHub Pages doesn't let this site
+         set custom response headers, so only CSP and Referrer-Policy below actually take effect. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+                   font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   img-src 'self' data: https:;
+                   connect-src 'self' https://www.google-analytics.com;">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="The Bayesian Briefing: Everything We Learned, From Rain Clouds to Ad Tests" />
+    <meta property="og:description" content="10 plain-English lessons on Bayesian statistics, with made-up data and runnable Python." />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="../css/main.css" />
+    <title>The Bayesian Briefing | Sandesh Thapa</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HHMRX6ZBCR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('consent', 'default', {
+        'analytics_storage': 'denied'
+      });
+      gtag('config', 'G-HHMRX6ZBCR', {
+        'anonymize_ip': true,
+        'cookie_flags': 'SameSite=None;Secure'
+      });
+    </script>
+  </head>
+
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <a href="../index.html#home">ST</a>
+        </div>
+        <ul class="nav-menu" id="nav-menu">
+          <li class="nav-item">
+            <a href="../index.html#home" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="../index.html#about" class="nav-link">About</a>
+          </li>
+          <li class="nav-item">
+            <a href="../index.html#skills" class="nav-link">Skills</a>
+          </li>
+          <li class="nav-item">
+            <a href="../index.html#projects" class="nav-link">Projects</a>
+          </li>
+          <li class="nav-item">
+            <a href="../index.html#certifications" class="nav-link">Certifications</a>
+          </li>
+          <li class="nav-item">
+            <a href="../index.html#experience" class="nav-link">Experience</a>
+          </li>
+          <li class="nav-item">
+            <a href="../index.html#contact" class="nav-link">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a href="index.html" class="nav-link active">Blog</a>
+          </li>
+        </ul>
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Post -->
+    <article class="post">
+      <div class="post-container">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+
+        <header class="post-header">
+          <span class="blog-card-tag">Bayesian Statistics</span>
+          <h1 class="post-title">The Bayesian Briefing: Everything We Learned, From Rain Clouds to Ad Tests</h1>
+          <p class="post-meta">October 2, 2026 · Sandesh Thapa · ~22 min read</p>
+        </header>
+
+        <div class="post-content">
+<h2>In this issue</h2>
+<p>Bayesian statistics is a careful version of everyday reasoning: start with what you believe, let evidence push it, and keep doing that. It ends in sentences a manager can use, like "there's an 85% chance the ads really increase sales, and the most likely lift is about X%."</p>
+<figure class="post-figure">
+<svg viewBox='0 0 760 250' role='img' aria-label='Bayesian thinking is one loop: believe, weigh evidence, update, act' fontSize='13'><defs><marker id='loop-arrow' viewBox='0 0 10 10' refX='9' refY='5' markerWidth='6' markerHeight='6' orient='auto-start-reverse'><path d='M0 0L10 5L0 10z' fill='rgba(184,184,184,0.35)'/></marker></defs><text x='24' y='30' font-size='15' font-weight='600' fill='#ffffff'>Bayesian thinking is one loop: believe, weigh evidence, update, act</text><g fill='none' stroke='rgba(184,184,184,0.35)' stroke-width='1.25'><path d='M182 124H210' marker-end='url(#loop-arrow)'/><path d='M366 124H394' marker-end='url(#loop-arrow)'/><path d='M550 124H578' marker-end='url(#loop-arrow)'/><path d='M472 160V200H104V160' marker-end='url(#loop-arrow)'/></g><rect x='26' y='88' width='156' height='72' rx='8' fill='none' stroke='rgba(184,184,184,0.35)' stroke-width='1.25'/><text x='104' y='78' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>Lessons 1 and 2</text><text x='104' y='112' text-anchor='middle' font-weight='600' fill='#ffffff'>Prior</text><text x='104' y='132' text-anchor='middle' font-size='11.5' fill='#ffffff'>What you believe</text><text x='104' y='148' text-anchor='middle' font-size='11.5' fill='#ffffff'>before the data</text><rect x='210' y='88' width='156' height='72' rx='8' fill='none' stroke='rgba(184,184,184,0.35)' stroke-width='1.25'/><text x='288' y='78' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>Lesson 3</text><text x='288' y='112' text-anchor='middle' font-weight='600' fill='#ffffff'>Likelihood</text><text x='288' y='132' text-anchor='middle' font-size='11.5' fill='#ffffff'>How well each answer</text><text x='288' y='148' text-anchor='middle' font-size='11.5' fill='#ffffff'>fits the evidence</text><rect x='394' y='88' width='156' height='72' rx='8' fill='#00d4ff' fill-opacity='0.12' stroke='#00d4ff' stroke-width='2'/><text x='472' y='78' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>Lessons 4 to 9</text><text x='472' y='112' text-anchor='middle' font-weight='600' fill='#ffffff'>Posterior</text><text x='472' y='132' text-anchor='middle' font-size='11.5' fill='#ffffff'>Prior &#215; likelihood,</text><text x='472' y='148' text-anchor='middle' font-size='11.5' fill='#ffffff'>rescaled to 100%</text><rect x='578' y='88' width='156' height='72' rx='8' fill='none' stroke='rgba(184,184,184,0.35)' stroke-width='1.25'/><text x='656' y='78' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>Lesson 10</text><text x='656' y='112' text-anchor='middle' font-weight='600' fill='#ffffff'>Decision</text><text x='656' y='132' text-anchor='middle' font-size='11.5' fill='#ffffff'>Pick the lowest</text><text x='656' y='148' text-anchor='middle' font-size='11.5' fill='#ffffff'>expected loss</text><text x='288' y='222' text-anchor='middle' font-size='11.5' fill='#b8b8b8'>Repeat with each new piece of evidence: each posterior becomes the next prior</text></svg>
+<figcaption>the Bayesian loop · 4 steps, repeated with each new piece of evidence</figcaption>
+</figure>
+<p>Each lesson below covers one part of this loop, using an everyday story, a small example of about 10 rows, and a computer experiment (a simulation).</p>
+<table>
+<thead>
+<tr>
+<th>Lesson</th>
+<th>Big idea</th>
+<th>Story</th>
+<th>Key number</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Probability as a degree of belief</td>
+<td>Maria's café and the rain</td>
+<td>70% becomes 83% after dark clouds</td>
+</tr>
+<tr>
+<td>2</td>
+<td>The prior</td>
+<td>Sam, the new basketball player</td>
+<td>60% of league players sit in the 70s</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Likelihood</td>
+<td>Sam makes 8 of 10</td>
+<td>An 80% shooter fits best (0.30)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Bayes' rule and base rates</td>
+<td>Shop gate, medical test</td>
+<td>Positive for a 1-in-100 disease: about 4%</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Updating step by step</td>
+<td>Alex's two coins</td>
+<td>50% becomes 87% after 10 flips</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Posterior and credible interval</td>
+<td>Sam's true skill</td>
+<td>88% chance Sam is 70% or better</td>
+</tr>
+<tr>
+<td>7</td>
+<td>How much the prior matters</td>
+<td>Two coaches who disagree</td>
+<td>Gap shrinks from 30 points to 0.5</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Bayesian A/B testing</td>
+<td>Bakery cake photos</td>
+<td>82% vs 99.9% chance B is better</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Shrinkage</td>
+<td>Two blenders</td>
+<td>Estimate error roughly halved</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Decisions under uncertainty</td>
+<td>Maria's tables, the ads</td>
+<td>€35 vs €90 expected loss</td>
+</tr>
+</tbody>
+</table>
+<h2>Lesson 1: Probability is how sure you are</h2>
+<p>A probability can describe how confident you are about a one-off event, and that confidence should move when new evidence arrives.</p>
+<p><strong>The story.</strong> Maria runs a café. Her weather app says "70% chance of rain." Tomorrow only happens once, so she can't replay it 100 times. She just needs to know how confident to be before she decides whether to put the outdoor tables out.</p>
+<p><strong>The numbers.</strong> On 10 days when the app said 70%, it rained on 7. Then we checked what the sky looked like at 7am on each of those days:</p>
+<table>
+<thead>
+<tr>
+<th>What Maria knows</th>
+<th>Days like this</th>
+<th>Rainy days</th>
+<th>Her belief in rain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Only the app's forecast</td>
+<td>10</td>
+<td>7</td>
+<td>70%</td>
+</tr>
+<tr>
+<td>Forecast + dark clouds</td>
+<td>6</td>
+<td>5</td>
+<td>83%</td>
+</tr>
+<tr>
+<td>Forecast + clear sky</td>
+<td>4</td>
+<td>2</td>
+<td>50%</td>
+</tr>
+</tbody>
+</table>
+<p>Dark clouds pushed her belief up and a clear sky pushed it down, but neither took it to 0% or 100%. A simulation of 1,000 such days gives the same three numbers.</p>
+<p>Dr. Lee's flu clinic shows the same pattern. Before any check, 3 of 10 coughing patients have flu (30%). With a fever, 2 of 4 do (50%). Without a fever, 1 of 6 does (about 17%).</p>
+<p><strong>Remember</strong></p>
+<ul>
+<li><strong>Degree of belief:</strong> a probability that describes how confident you are about something, even a single event.</li>
+<li><strong>Evidence:</strong> new information that should change how confident you are. In your ad test, the evidence will be the sales numbers.</li>
+<li><strong>Bayesian vs the usual approach:</strong> the methods from your causal course (p-values, confidence intervals) treat probability only as "how often would this happen if we repeated it many times." Bayesian statistics also lets probability mean "how sure I am," which is what lets you say "85% chance the ads work."</li>
+</ul>
+<h2>Lesson 2: The prior is where you start</h2>
+<p>A prior is what you believe before seeing any new data, and the best priors come from similar past cases.</p>
+<p><strong>The story.</strong> Sam joins your basketball team. You haven't seen Sam shoot yet, but you've watched plenty of players in this league. Their free-throw percentages were 62, 68, 71, 73, 75, 76, 78, 80, 83 and 88.</p>
+<p><strong>The hat game.</strong> Write each player's percentage on a card and put it in a hat. Treat Sam as one more card pulled at random:</p>
+<table>
+<thead>
+<tr>
+<th>Bucket</th>
+<th>Players</th>
+<th>Chance Sam lands here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>60s</td>
+<td>2 of 10</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>70s</td>
+<td>6 of 10</td>
+<td>60%</td>
+</tr>
+<tr>
+<td>80s</td>
+<td>2 of 10</td>
+<td>20%</td>
+</tr>
+</tbody>
+</table>
+<p>So a 70s value is about three times as believable as a 60s value. A 1,000-player simulation gives the same 20% / 60% / 20%.</p>
+<p><strong>Hill vs flat.</strong> A "know nothing" prior treats every value from 0% to 100% as equally believable. It puts only 10% of its belief in the 70s and says Sam is as likely to hit 15% as 75%. That isn't neutral: it throws away what you know about basketball. Like guessing a new pizza place's delivery time, you'd use "20 to 45 minutes, like other places," not "anywhere from 1 minute to 5 hours."</p>
+<p><strong>Remember</strong></p>
+<ul>
+<li><strong>Prior:</strong> your belief before the new data. It is built <em>from</em> past data, experts or common sense, but it is a belief, not the data itself.</li>
+<li><strong>One number or a range?</strong> For a yes/no question (rain or not), one number is the whole prior. For a "how much?" question (Sam's skill, the ad lift), the prior is a range with some values more believable than others.</li>
+<li><strong>Distribution:</strong> a picture of how something is spread out, showing which values are common and which are rare. A narrow hill means "I'm fairly sure"; a wide one means "my best guess, but I really don't know."</li>
+<li><strong>For your ads:</strong> if past retargeting tests showed small lifts, your prior should say "probably small, maybe zero, very unlikely to be +50%."</li>
+</ul>
+<h2>Lesson 3: Likelihood is the data's vote</h2>
+<p>Likelihood scores each possible explanation by asking: if this were true, how often would we see exactly what we saw?</p>
+<p><strong>The story.</strong> Sam takes 10 free throws and makes 8. Three explanations: Sam is really a 50% shooter (Sam A), an 80% shooter (Sam B) or a 95% shooter (Sam C). Imagine each version shooting 10 times a day for many days, and count how often they make exactly 8.</p>
+<figure class="post-figure">
+<svg viewBox='0 0 760 352' role='img' aria-label='An 80% shooter fits 8 of 10 best; a 50% shooter barely fits' fontSize='12'><text x='24' y='28' font-size='16' font-weight='600' fill='#ffffff'>An 80% shooter fits 8 of 10 best; a 50% shooter barely fits</text><text x='24' y='50' fill='#b8b8b8'>Chance that a shooter of each true skill makes exactly 8 of 10 free throws</text><line x1='72' x2='720' y1='300.0' y2='300.0' stroke='rgba(184,184,184,0.15)'/><text x='64' y='304.0' text-anchor='end' fill='#b8b8b8'>0.0</text><line x1='72' x2='720' y1='236.2' y2='236.2' stroke='rgba(184,184,184,0.15)'/><text x='64' y='240.2' text-anchor='end' fill='#b8b8b8'>0.1</text><line x1='72' x2='720' y1='172.5' y2='172.5' stroke='rgba(184,184,184,0.15)'/><text x='64' y='176.5' text-anchor='end' fill='#b8b8b8'>0.2</text><line x1='72' x2='720' y1='108.8' y2='108.8' stroke='rgba(184,184,184,0.15)'/><text x='64' y='112.8' text-anchor='end' fill='#b8b8b8'>0.3</text><line x1='72' x2='720' y1='300' y2='300' stroke='rgba(184,184,184,0.35)'/><text x='72.0' y='318' text-anchor='middle' fill='#b8b8b8'>0%</text><text x='201.6' y='318' text-anchor='middle' fill='#b8b8b8'>20%</text><text x='331.2' y='318' text-anchor='middle' fill='#b8b8b8'>40%</text><text x='460.8' y='318' text-anchor='middle' fill='#b8b8b8'>60%</text><text x='590.4' y='318' text-anchor='middle' fill='#b8b8b8'>80%</text><text x='720.0' y='318' text-anchor='middle' fill='#b8b8b8'>100%</text><text x='396.0' y='340' text-anchor='middle' fill='#b8b8b8'>Sam's true free-throw %</text><path d='M72.0 300.00L104.4 300.00L136.8 300.00L169.2 300.00L201.6 299.94L234.0 299.75L266.4 299.11L298.8 297.26L331.2 293.24L363.6 285.40L396.0 272.01L428.4 251.36L460.8 222.93L493.2 187.99L525.6 151.14L558.0 120.48L590.4 107.47L622.8 124.11L655.2 176.52L687.6 252.44L720.0 300.00' fill='none' stroke='rgba(184,184,184,0.45)' stroke-width='2'/><circle cx='72.0' cy='300.00' r='2.5' fill='rgba(184,184,184,0.45)'><title>0% shooter: 0.000</title></circle><circle cx='104.4' cy='300.00' r='2.5' fill='rgba(184,184,184,0.45)'><title>5% shooter: 0.000</title></circle><circle cx='136.8' cy='300.00' r='2.5' fill='rgba(184,184,184,0.45)'><title>10% shooter: 0.000</title></circle><circle cx='169.2' cy='300.00' r='2.5' fill='rgba(184,184,184,0.45)'><title>15% shooter: 0.000</title></circle><circle cx='201.6' cy='299.94' r='2.5' fill='rgba(184,184,184,0.45)'><title>20% shooter: 0.000</title></circle><circle cx='234.0' cy='299.75' r='2.5' fill='rgba(184,184,184,0.45)'><title>25% shooter: 0.000</title></circle><circle cx='266.4' cy='299.11' r='2.5' fill='rgba(184,184,184,0.45)'><title>30% shooter: 0.001</title></circle><circle cx='298.8' cy='297.26' r='2.5' fill='rgba(184,184,184,0.45)'><title>35% shooter: 0.004</title></circle><circle cx='331.2' cy='293.24' r='2.5' fill='rgba(184,184,184,0.45)'><title>40% shooter: 0.011</title></circle><circle cx='363.6' cy='285.40' r='2.5' fill='rgba(184,184,184,0.45)'><title>45% shooter: 0.023</title></circle><circle cx='396.0' cy='272.01' r='2.5' fill='rgba(184,184,184,0.45)'><title>50% shooter: 0.044</title></circle><circle cx='428.4' cy='251.36' r='2.5' fill='rgba(184,184,184,0.45)'><title>55% shooter: 0.076</title></circle><circle cx='460.8' cy='222.93' r='2.5' fill='rgba(184,184,184,0.45)'><title>60% shooter: 0.121</title></circle><circle cx='493.2' cy='187.99' r='2.5' fill='rgba(184,184,184,0.45)'><title>65% shooter: 0.176</title></circle><circle cx='525.6' cy='151.14' r='2.5' fill='rgba(184,184,184,0.45)'><title>70% shooter: 0.234</title></circle><circle cx='558.0' cy='120.48' r='2.5' fill='rgba(184,184,184,0.45)'><title>75% shooter: 0.282</title></circle><circle cx='590.4' cy='107.47' r='2.5' fill='rgba(184,184,184,0.45)'><title>80% shooter: 0.302</title></circle><circle cx='622.8' cy='124.11' r='2.5' fill='rgba(184,184,184,0.45)'><title>85% shooter: 0.276</title></circle><circle cx='655.2' cy='176.52' r='2.5' fill='rgba(184,184,184,0.45)'><title>90% shooter: 0.194</title></circle><circle cx='687.6' cy='252.44' r='2.5' fill='rgba(184,184,184,0.45)'><title>95% shooter: 0.075</title></circle><circle cx='720.0' cy='300.00' r='2.5' fill='rgba(184,184,184,0.45)'><title>100% shooter: 0.000</title></circle><circle cx='396.0' cy='272.01' r='6' fill='#b8b8b8'><title>Sam A, 50% shooter: 0.04</title></circle><text x='384.0' y='266.0' text-anchor='end' font-weight='400' fill='#ffffff'>Sam A (50% shooter): 0.04</text><circle cx='590.4' cy='107.47' r='6' fill='#00d4ff'><title>Sam B, 80% shooter: 0.30</title></circle><text x='590.4' y='93.5' text-anchor='middle' font-weight='600' fill='#ffffff'>Sam B (80% shooter): 0.30</text><circle cx='687.6' cy='252.44' r='6' fill='#b8b8b8'><title>Sam C, 95% shooter: 0.07</title></circle><text x='675.6' y='246.4' text-anchor='end' font-weight='400' fill='#ffffff'>Sam C (95% shooter): 0.07</text></svg>
+<figcaption>binomial chance of exactly 8 makes in 10 shots, every 5% of skill · matches a 10,000-day simulation (4.3%, 29.9%, 7.2%)</figcaption>
+</figure>
+<p>How to read it: each dot is one possible Sam, and the higher the dot, the better that Sam explains the 8 of 10. The curve is flat below 40% because weak shooters almost never make 8 of 10 (a 20% shooter manages it about once in 14,000 days). It hits exactly zero at 0% and 100%, because a shooter who never scores, or never misses, cannot produce Sam's day. A 60% Sam (0.12) fits better than a 95% Sam (0.07), because the hill drops steeply on the right. Had Sam made 10 of 10, the hill would slide right and Sam C would fit best.</p>
+<p><strong>Doing it by hand.</strong> Sam makes 2 of 3 shots. How likely is that for a 60% shooter?</p>
+<ol>
+<li>Chances: make = 0.6, miss = 0.4.</li>
+<li>One pattern (make, make, miss): 0.6 × 0.6 × 0.4 = 0.144.</li>
+<li>Count the orders: the one miss can be shot 1, 2 or 3, so 3 ways.</li>
+<li>Multiply: 3 × 0.144 = 0.432, about 43%.</li>
+</ol>
+<p>For 8 of 10, there are 45 ways to place 2 misses among 10 shots (10 × 9 ÷ 2). That 45 is the same for every skill level, so it cancels out later (Lesson 4) and you can skip it. In Python, <code>binom.pmf(8, 10, 0.8)</code> does the whole calculation.</p>
+<p><strong>The trap.</strong> Sam B's 0.30 means "<em>if</em> Sam were an 80% shooter, we'd see 8 of 10 about 30% of the time." It does <strong>not</strong> mean "30% chance Sam is an 80% shooter." The three likelihoods add to only 41%, so they can't be chances of each explanation. A handy test: a question that starts "If X were true…" is a likelihood.</p>
+<h2>Lesson 4: Bayes' rule and the base rate</h2>
+<p>When something is rare, most positive results are false alarms, even from a good test. Bayes' rule gets the right answer by combining how common the thing is (the prior) with how well the result fits each explanation (the likelihood).</p>
+<p><strong>The story: a shop's security gate.</strong> The gate always beeps for shoplifters, but sometimes beeps by mistake for honest customers (about 1 in 20). Take the same gate to two shops of 100 customers each:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Shop 1</th>
+<th>Shop 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shoplifters</td>
+<td>1</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Honest customers</td>
+<td>99</td>
+<td>60</td>
+</tr>
+<tr>
+<td>Real beeps</td>
+<td>1</td>
+<td>40</td>
+</tr>
+<tr>
+<td>False beeps</td>
+<td>5</td>
+<td>3</td>
+</tr>
+<tr>
+<td>A beep means a shoplifter</td>
+<td>1 of 6, about 17%</td>
+<td>40 of 43, about 93%</td>
+</tr>
+</tbody>
+</table>
+<p>Same gate, same number of customers. Only how common shoplifters are changed. The medical test is the same story: patient = customer, sick person = shoplifter, positive test = beep.</p>
+<p><strong>The recipe, on a 1-in-10 disease.</strong> The test catches every sick person and wrongly flags 2 in 9 healthy people.</p>
+<table>
+<thead>
+<tr>
+<th>Explanation</th>
+<th>Prior</th>
+<th>Likelihood of a positive</th>
+<th>Prior × likelihood</th>
+<th>Share of the total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sick</td>
+<td>0.10</td>
+<td>1.00</td>
+<td>0.10</td>
+<td>0.10 ÷ 0.30 = 33%</td>
+</tr>
+<tr>
+<td>Healthy</td>
+<td>0.90</td>
+<td>0.22</td>
+<td>0.20</td>
+<td>0.20 ÷ 0.30 = 67%</td>
+</tr>
+</tbody>
+</table>
+<p>For a 1-in-100 disease: 0.01 for sick and 0.99 × 0.22 = 0.2178 for healthy. The total is 0.2278, so the sick share is 0.01 ÷ 0.2278 = about 4.4%. A 100,000-person simulation gives about 4.3%.</p>
+<figure class="post-figure">
+<svg viewBox='0 0 760 350' role='img' aria-label='The same positive test means 4% chance of disease in a 1-in-100 town but 33% in a 1-in-10 town' fontSize='12'><text x='24' y='28' font-size='16' font-weight='600' fill='#ffffff'>Same test, different towns: a positive means 4% or 33%</text><text x='24' y='50' fill='#b8b8b8'>Chance a person who tests positive is really sick, by how common the disease is</text><line x1='72' x2='720' y1='290.0' y2='290.0' stroke='rgba(184,184,184,0.15)'/><text x='64' y='294.0' text-anchor='end' fill='#b8b8b8'>0%</text><line x1='72' x2='720' y1='240.0' y2='240.0' stroke='rgba(184,184,184,0.15)'/><text x='64' y='244.0' text-anchor='end' fill='#b8b8b8'>25%</text><line x1='72' x2='720' y1='190.0' y2='190.0' stroke='rgba(184,184,184,0.15)'/><text x='64' y='194.0' text-anchor='end' fill='#b8b8b8'>50%</text><line x1='72' x2='720' y1='140.0' y2='140.0' stroke='rgba(184,184,184,0.15)'/><text x='64' y='144.0' text-anchor='end' fill='#b8b8b8'>75%</text><line x1='72' x2='720' y1='90.0' y2='90.0' stroke='rgba(184,184,184,0.15)'/><text x='64' y='94.0' text-anchor='end' fill='#b8b8b8'>100%</text><rect x='96.3' y='289.1' width='59.4' height='0.9' fill='rgba(184,184,184,0.45)'><title>Disease in 1 in 1,000: 0.4% of positives are sick</title></rect><text x='126.0' y='281.1' text-anchor='middle' font-weight='400' fill='#ffffff'>0.4%</text><text x='126.0' y='308' text-anchor='middle' fill='#b8b8b8'>1 in 1,000</text><rect x='204.3' y='281.3' width='59.4' height='8.7' fill='#00d4ff'><title>Disease in 1 in 100: 4.3% of positives are sick</title></rect><text x='234.0' y='273.3' text-anchor='middle' font-weight='600' fill='#ffffff'>4.3%</text><text x='234.0' y='308' text-anchor='middle' fill='#b8b8b8'>1 in 100</text><rect x='312.3' y='251.7' width='59.4' height='38.3' fill='rgba(184,184,184,0.45)'><title>Disease in 1 in 20: 19.2% of positives are sick</title></rect><text x='342.0' y='243.7' text-anchor='middle' font-weight='400' fill='#ffffff'>19%</text><text x='342.0' y='308' text-anchor='middle' fill='#b8b8b8'>1 in 20</text><rect x='420.3' y='223.3' width='59.4' height='66.7' fill='#00d4ff'><title>Disease in 1 in 10: 33.3% of positives are sick</title></rect><text x='450.0' y='215.3' text-anchor='middle' font-weight='600' fill='#ffffff'>33%</text><text x='450.0' y='308' text-anchor='middle' fill='#b8b8b8'>1 in 10</text><rect x='528.3' y='170.0' width='59.4' height='120.0' fill='rgba(184,184,184,0.45)'><title>Disease in 1 in 4: 60.0% of positives are sick</title></rect><text x='558.0' y='162.0' text-anchor='middle' font-weight='400' fill='#ffffff'>60%</text><text x='558.0' y='308' text-anchor='middle' fill='#b8b8b8'>1 in 4</text><rect x='636.3' y='126.4' width='59.4' height='163.6' fill='rgba(184,184,184,0.45)'><title>Disease in 1 in 2: 81.8% of positives are sick</title></rect><text x='666.0' y='118.4' text-anchor='middle' font-weight='400' fill='#ffffff'>82%</text><text x='666.0' y='308' text-anchor='middle' fill='#b8b8b8'>1 in 2</text><line x1='72' x2='720' y1='290' y2='290' stroke='rgba(184,184,184,0.35)'/><text x='396.0' y='332' text-anchor='middle' fill='#b8b8b8'>How many people in the town have the disease (the base rate)</text></svg>
+<figcaption>computed with Bayes' rule · test catches every sick person, false alarm for 2 in 9 healthy people</figcaption>
+</figure>
+<p>Even a test with only 1% false alarms gives just 50% for a 1-in-100 disease. Town size doesn't matter: a 1-in-10 disease gives 33% in a town of 10 or of 100,000.</p>
+<p><strong>Remember</strong></p>
+<ul>
+<li><strong>Base rate:</strong> how common something is before you test anyone. It is the prior.</li>
+<li><strong>False positive:</strong> a positive result for someone who doesn't have the thing.</li>
+<li><strong>Bayes' rule:</strong> prior × likelihood for each explanation, then divide each by the total so they add up to 100%.</li>
+<li>Two tempting wrong answers: keeping the prior and ignoring the test (10%), or trusting the test and ignoring the base rate (90%).</li>
+<li><strong>For your ads:</strong> if real ad effects are rare or small, one impressive result is more likely a fluke than it looks.</li>
+</ul>
+<h2>Lesson 5: Updating one piece of evidence at a time</h2>
+<p>After each new piece of evidence, your updated belief becomes the prior for the next one, and small pushes add up.</p>
+<p><strong>The story.</strong> Alex has two coins: a normal one (heads 50% of the time) and a trick one (heads 80%). Alex grabs one at random, so your prior is 50/50. The first flip is heads.</p>
+<p><strong>Why one flip moves you a little.</strong> Imagine 100 rounds of "grab a coin, flip once":</p>
+<table>
+<thead>
+<tr>
+<th>Coin</th>
+<th>Times grabbed</th>
+<th>Heads</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Normal</td>
+<td>50</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Trick</td>
+<td>50</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>100</td>
+<td>65</td>
+</tr>
+</tbody>
+</table>
+<p>You saw heads, so you're among the 65 heads; 40 came from the trick coin. Belief rises from 50% to about 62%. The same answer with the Lesson 4 recipe: trick 0.5 × 0.8 = 0.40, normal 0.5 × 0.5 = 0.25, then 0.40 ÷ 0.65 = 62%. Had the flip been tails: 0.10 ÷ 0.35 = 29%.</p>
+<figure class="post-figure">
+<svg viewBox='0 0 760 352' role='img' aria-label='Eight heads and two tails take belief in the trick coin from 50% to 87%' fontSize='12'><text x='24' y='28' font-size='16' font-weight='600' fill='#ffffff'>Eight heads and two tails take belief in the trick coin from 50% to 87%</text><text x='24' y='50' fill='#b8b8b8'>Belief it is the trick coin after each flip; each tails (T) pulls it back down</text><line x1='72' x2='712' y1='290.0' y2='290.0' stroke='rgba(184,184,184,0.15)'/><text x='64' y='294.0' text-anchor='end' fill='#b8b8b8'>0%</text><line x1='72' x2='712' y1='240.0' y2='240.0' stroke='rgba(184,184,184,0.15)'/><text x='64' y='244.0' text-anchor='end' fill='#b8b8b8'>25%</text><line x1='72' x2='712' y1='140.0' y2='140.0' stroke='rgba(184,184,184,0.15)'/><text x='64' y='144.0' text-anchor='end' fill='#b8b8b8'>75%</text><line x1='72' x2='712' y1='90.0' y2='90.0' stroke='rgba(184,184,184,0.15)'/><text x='64' y='94.0' text-anchor='end' fill='#b8b8b8'>100%</text><line x1='72' x2='712' y1='190.0' y2='190.0' stroke='#ff6b6b' stroke-dasharray='4 4'/><text x='64' y='194.0' text-anchor='end' fill='#b8b8b8'>50%</text><text x='712' y='206.0' text-anchor='end' fill='#b8b8b8'>starting belief (prior)</text><line x1='72' x2='712' y1='290' y2='290' stroke='rgba(184,184,184,0.35)'/><text x='72.0' y='308' text-anchor='middle' fill='#b8b8b8'>start</text><text x='136.0' y='308' text-anchor='middle' font-weight='400' fill='#b8b8b8'>1 H</text><text x='200.0' y='308' text-anchor='middle' font-weight='400' fill='#b8b8b8'>2 H</text><text x='264.0' y='308' text-anchor='middle' font-weight='600' fill='#ffffff'>3 T</text><text x='328.0' y='308' text-anchor='middle' font-weight='400' fill='#b8b8b8'>4 H</text><text x='392.0' y='308' text-anchor='middle' font-weight='400' fill='#b8b8b8'>5 H</text><text x='456.0' y='308' text-anchor='middle' font-weight='400' fill='#b8b8b8'>6 H</text><text x='520.0' y='308' text-anchor='middle' font-weight='600' fill='#ffffff'>7 T</text><text x='584.0' y='308' text-anchor='middle' font-weight='400' fill='#b8b8b8'>8 H</text><text x='648.0' y='308' text-anchor='middle' font-weight='400' fill='#b8b8b8'>9 H</text><text x='712.0' y='308' text-anchor='middle' font-weight='400' fill='#b8b8b8'>10 H</text><text x='392.0' y='332' text-anchor='middle' fill='#b8b8b8'>Flip number and result (H = heads, T = tails)</text><path d='M72.0 190.00L136.0 166.92L200.0 146.18L264.0 188.81L328.0 165.80L392.0 145.23L456.0 128.50L520.0 164.69L584.0 144.28L648.0 127.77L712.0 115.41' fill='none' stroke='rgba(184,184,184,0.45)' stroke-width='2'/><circle cx='136.0' cy='166.92' r='4' fill='rgba(184,184,184,0.45)'><title>After flip 1 (H): 62%</title></circle><text x='136.0' y='156.92' text-anchor='middle' font-weight='400' fill='#ffffff'>62%</text><circle cx='200.0' cy='146.18' r='4' fill='rgba(184,184,184,0.45)'><title>After flip 2 (H): 72%</title></circle><text x='200.0' y='136.18' text-anchor='middle' font-weight='400' fill='#ffffff'>72%</text><circle cx='264.0' cy='188.81' r='4' fill='#b8b8b8'><title>After flip 3 (T): 51%</title></circle><text x='264.0' y='206.81' text-anchor='middle' font-weight='400' fill='#ffffff'>51%</text><circle cx='328.0' cy='165.80' r='4' fill='rgba(184,184,184,0.45)'><title>After flip 4 (H): 62%</title></circle><text x='328.0' y='155.80' text-anchor='middle' font-weight='400' fill='#ffffff'>62%</text><circle cx='392.0' cy='145.23' r='4' fill='rgba(184,184,184,0.45)'><title>After flip 5 (H): 72%</title></circle><text x='392.0' y='135.23' text-anchor='middle' font-weight='400' fill='#ffffff'>72%</text><circle cx='456.0' cy='128.50' r='4' fill='rgba(184,184,184,0.45)'><title>After flip 6 (H): 81%</title></circle><text x='456.0' y='118.50' text-anchor='middle' font-weight='400' fill='#ffffff'>81%</text><circle cx='520.0' cy='164.69' r='4' fill='#b8b8b8'><title>After flip 7 (T): 63%</title></circle><text x='520.0' y='182.69' text-anchor='middle' font-weight='400' fill='#ffffff'>63%</text><circle cx='584.0' cy='144.28' r='4' fill='rgba(184,184,184,0.45)'><title>After flip 8 (H): 73%</title></circle><text x='584.0' y='134.28' text-anchor='middle' font-weight='400' fill='#ffffff'>73%</text><circle cx='648.0' cy='127.77' r='4' fill='rgba(184,184,184,0.45)'><title>After flip 9 (H): 81%</title></circle><text x='648.0' y='117.77' text-anchor='middle' font-weight='400' fill='#ffffff'>81%</text><circle cx='712.0' cy='115.41' r='6' fill='#00d4ff'><title>After flip 10 (H): 87%</title></circle><text x='712.0' y='105.41' text-anchor='middle' font-weight='600' fill='#ffffff'>87%</text></svg>
+<figcaption>computed with Bayes' rule after each flip · trick coin 80% heads, normal coin 50%, prior 50/50</figcaption>
+</figure>
+<p>Each tails pulls belief down more than a heads pushes it up. Tails is quite surprising for a trick coin (20%), while heads is only a bit more typical of it (80% vs 50%). More surprising evidence gives a bigger push. With 50 flips of the trick coin, belief climbs above 99%.</p>
+<p><strong>Remember</strong></p>
+<ul>
+<li>Yesterday's "after" is today's "before."</li>
+<li>"One data point tells me nothing" is wrong: it tells you a little. If each flip counted for nothing, ten heads in a row would leave you at 50%.</li>
+<li>Updating day by day or all at once gives exactly the same final belief.</li>
+<li><strong>For your ads:</strong> treat each day's sales like one flip, and update as the test runs.</li>
+</ul>
+<h2>Lesson 6: The posterior and the credible interval</h2>
+<p>The posterior is your updated belief across every possible answer, and it lets you make statements like "88% chance Sam is at least a 70% shooter."</p>
+<p><strong>The story.</strong> You've seen Sam make 8 of 10. Now the question is "how good is Sam?", with ten possible answers from 50% to 95%. The recipe is the same as the coin, with ten rows instead of two: multiply prior × likelihood for each row, add the products up (23.77), and divide each row by that total.</p>
+<figure class="post-figure">
+<svg viewBox='0 0 760 372' role='img' aria-label='8 of 10 moves belief toward 80%; 95% of it sits between 65% and 90%' fontSize='12'><text x='24' y='28' font-size='16' font-weight='600' fill='#ffffff'>8 of 10 moves belief toward 80%; 95% of it sits between 65% and 90%</text><text x='24' y='50' fill='#b8b8b8'>Belief in each possible skill level for Sam, before (prior) and after (posterior) the shots</text><rect x='24' y='64' width='12' height='12' fill='rgba(184,184,184,0.45)'/><text x='42' y='74' fill='#b8b8b8'>Prior (league players)</text><rect x='196' y='64' width='12' height='12' fill='#00d4ff'/><text x='214' y='74' fill='#b8b8b8'>Posterior (after 8 of 10)</text><rect x='265.2' y='96.0' width='394.4' height='204.0' fill='rgba(255,107,107,0.12)'/><text x='462.4' y='108' text-anchor='middle' fill='#ffffff'>95% credible interval: 65% to 90% holds 95% of belief</text><line x1='64' x2='728' y1='300.0' y2='300.0' stroke='rgba(184,184,184,0.15)'/><text x='56' y='304.0' text-anchor='end' fill='#b8b8b8'>0%</text><line x1='64' x2='728' y1='236.7' y2='236.7' stroke='rgba(184,184,184,0.15)'/><text x='56' y='240.7' text-anchor='end' fill='#b8b8b8'>10%</text><line x1='64' x2='728' y1='173.3' y2='173.3' stroke='rgba(184,184,184,0.15)'/><text x='56' y='177.3' text-anchor='end' fill='#b8b8b8'>20%</text><line x1='64' x2='728' y1='110.0' y2='110.0' stroke='rgba(184,184,184,0.15)'/><text x='56' y='114.0' text-anchor='end' fill='#b8b8b8'>30%</text><rect x='75.0' y='293.7' width='21.2' height='6.3' fill='rgba(184,184,184,0.45)'><title>Prior, 50% shooter: 1%</title></rect><rect x='98.2' y='298.8' width='21.2' height='1.2' fill='#00d4ff'><title>Posterior, 50% shooter: 0.2%</title></rect><text x='108.8' y='292.8' text-anchor='middle' font-size='11' fill='#ffffff'>0.2</text><text x='97.2' y='318' text-anchor='middle' fill='#b8b8b8'>50%</text><rect x='141.4' y='281.0' width='21.2' height='19.0' fill='rgba(184,184,184,0.45)'><title>Prior, 55% shooter: 3%</title></rect><rect x='164.6' y='293.9' width='21.2' height='6.1' fill='#00d4ff'><title>Posterior, 55% shooter: 1.0%</title></rect><text x='175.2' y='287.9' text-anchor='middle' font-size='11' fill='#ffffff'>1.0</text><text x='163.6' y='318' text-anchor='middle' fill='#b8b8b8'>55%</text><rect x='207.8' y='262.0' width='21.2' height='38.0' fill='rgba(184,184,184,0.45)'><title>Prior, 60% shooter: 6%</title></rect><rect x='231.0' y='280.7' width='21.2' height='19.3' fill='#00d4ff'><title>Posterior, 60% shooter: 3.1%</title></rect><text x='241.6' y='274.7' text-anchor='middle' font-size='11' fill='#ffffff'>3.1</text><text x='230.0' y='318' text-anchor='middle' fill='#b8b8b8'>60%</text><rect x='274.2' y='236.7' width='21.2' height='63.3' fill='rgba(184,184,184,0.45)'><title>Prior, 65% shooter: 10%</title></rect><rect x='297.4' y='253.2' width='21.2' height='46.8' fill='#00d4ff'><title>Posterior, 65% shooter: 7.4%</title></rect><text x='308.0' y='247.2' text-anchor='middle' font-size='11' fill='#ffffff'>7.4</text><text x='296.4' y='318' text-anchor='middle' fill='#b8b8b8'>65%</text><rect x='340.6' y='205.0' width='21.2' height='95.0' fill='rgba(184,184,184,0.45)'><title>Prior, 70% shooter: 15%</title></rect><rect x='363.8' y='206.7' width='21.2' height='93.3' fill='#00d4ff'><title>Posterior, 70% shooter: 14.7%</title></rect><text x='374.4' y='200.7' text-anchor='middle' font-size='11' fill='#ffffff'>14.7</text><text x='362.8' y='318' text-anchor='middle' fill='#b8b8b8'>70%</text><rect x='407.0' y='173.3' width='21.2' height='126.7' fill='rgba(184,184,184,0.45)'><title>Prior, 75% shooter: 20%</title></rect><rect x='430.2' y='149.9' width='21.2' height='150.1' fill='#00d4ff'><title>Posterior, 75% shooter: 23.7%</title></rect><text x='440.8' y='143.9' text-anchor='middle' font-size='11' fill='#ffffff'>23.7</text><text x='429.2' y='318' text-anchor='middle' fill='#b8b8b8'>75%</text><rect x='473.4' y='173.3' width='21.2' height='126.7' fill='rgba(184,184,184,0.45)'><title>Prior, 80% shooter: 20%</title></rect><rect x='496.6' y='139.0' width='21.2' height='161.0' fill='#00d4ff'><title>Posterior, 80% shooter: 25.4%</title></rect><text x='507.2' y='133.0' text-anchor='middle' font-size='11' fill='#ffffff'>25.4</text><text x='495.6' y='318' text-anchor='middle' fill='#b8b8b8'>80%</text><rect x='539.8' y='205.0' width='21.2' height='95.0' fill='rgba(184,184,184,0.45)'><title>Prior, 85% shooter: 15%</title></rect><rect x='563.0' y='189.7' width='21.2' height='110.3' fill='#00d4ff'><title>Posterior, 85% shooter: 17.4%</title></rect><text x='573.6' y='183.7' text-anchor='middle' font-size='11' fill='#ffffff'>17.4</text><text x='562.0' y='318' text-anchor='middle' fill='#b8b8b8'>85%</text><rect x='606.2' y='249.3' width='21.2' height='50.7' fill='rgba(184,184,184,0.45)'><title>Prior, 90% shooter: 8%</title></rect><rect x='629.4' y='258.7' width='21.2' height='41.3' fill='#00d4ff'><title>Posterior, 90% shooter: 6.5%</title></rect><text x='640.0' y='252.7' text-anchor='middle' font-size='11' fill='#ffffff'>6.5</text><text x='628.4' y='318' text-anchor='middle' fill='#b8b8b8'>90%</text><rect x='672.6' y='287.3' width='21.2' height='12.7' fill='rgba(184,184,184,0.45)'><title>Prior, 95% shooter: 2%</title></rect><rect x='695.8' y='296.0' width='21.2' height='4.0' fill='#00d4ff'><title>Posterior, 95% shooter: 0.6%</title></rect><text x='706.4' y='290.0' text-anchor='middle' font-size='11' fill='#ffffff'>0.6</text><text x='694.8' y='318' text-anchor='middle' fill='#b8b8b8'>95%</text><line x1='64' x2='728' y1='300' y2='300' stroke='rgba(184,184,184,0.35)'/><text x='396.0' y='342' text-anchor='middle' fill='#b8b8b8'>Sam's possible true free-throw %</text></svg>
+<figcaption>10-row Bayes table from the course · prior chosen by hand to match league players; posterior = prior × likelihood, rescaled</figcaption>
+</figure>
+<p>How to read it: grey bars show your belief before the shots, blue bars after. The prior peaked at 75 to 80% and the likelihood at 80%, so the posterior lands between them, with 80% the most believable (25.4%) and 75% right behind (23.7%).</p>
+<p><strong>Reading answers off the posterior.</strong> Add up the rows that count:</p>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Rows added</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chance Sam is 70% or better</td>
+<td>70% to 95%</td>
+<td>about 88%</td>
+</tr>
+<tr>
+<td>Chance Sam is 80% or better</td>
+<td>80% to 95%</td>
+<td>about 50%</td>
+</tr>
+<tr>
+<td>Chance Sam is outside 65% to 90%</td>
+<td>50% to 60%, plus 95%</td>
+<td>about 5%</td>
+</tr>
+</tbody>
+</table>
+<p>Notice the answer to "how good is Sam?" is no longer one number. It is a whole range of possible answers, each with its own chance. That range is the posterior.</p>
+<p><strong>Credible vs confidence interval.</strong> They look alike but say different things. A confidence interval (from your causal course) is a promise about the method: if you repeated the study many times, 95% of the ranges would contain the truth. Think of a fishing net that catches the fish 95% of the times you throw it. A credible interval is a statement about this one result: "there's a 95% chance the truth is in this range." That is the sentence managers want, and only the credible interval lets you say it honestly.</p>
+<p><strong>Remember</strong></p>
+<ul>
+<li><strong>Posterior:</strong> your updated belief after seeing the data, spread across every possible answer.</li>
+<li><strong>Credible interval:</strong> a range that holds a chosen share, such as 95%, of your posterior belief.</li>
+<li><strong>For your ads:</strong> "chance the ads work" = the posterior added up over every lift above zero.</li>
+</ul>
+<h2>Lesson 7: When the data outvotes the prior</h2>
+<p>With little data the prior has a big say; with lots of data the data wins, and people who started with different beliefs end up agreeing.</p>
+<p><strong>The story.</strong> You'd shrug off one friend saying a new restaurant is amazing, but not fifty people. Same with Sam: Coach Hopeful starts at 90%, Coach Doubtful at 60%, and both watch the same shots.</p>
+<figure class="post-figure">
+<svg viewBox='0 0 760 372' role='img' aria-label="More shots shrink the coaches gap from 30 points to half a point" fontSize='12'><text x='24' y='28' font-size='16' font-weight='600' fill='#ffffff'>More shots shrink the coaches' gap from 30 points to half a point</text><text x='24' y='50' fill='#b8b8b8'>Each coach's best guess of Sam's skill as they watch more shots (Sam makes 80%)</text><line x1='80' x2='560' y1='273.8' y2='273.8' stroke='rgba(184,184,184,0.15)'/><text x='70' y='277.8' text-anchor='end' fill='#b8b8b8'>60%</text><line x1='80' x2='560' y1='221.2' y2='221.2' stroke='rgba(184,184,184,0.15)'/><text x='70' y='225.2' text-anchor='end' fill='#b8b8b8'>70%</text><line x1='80' x2='560' y1='168.8' y2='168.8' stroke='rgba(184,184,184,0.15)'/><text x='70' y='172.8' text-anchor='end' fill='#b8b8b8'>80%</text><line x1='80' x2='560' y1='116.2' y2='116.2' stroke='rgba(184,184,184,0.15)'/><text x='70' y='120.2' text-anchor='end' fill='#b8b8b8'>90%</text><line x1='80' x2='560' y1='168.8' y2='168.8' stroke='#ff6b6b' stroke-dasharray='4 4'/><text x='84' y='162.8' fill='#b8b8b8'>Sam's rate in the shots</text><line x1='80' x2='560' y1='300' y2='300' stroke='rgba(184,184,184,0.35)'/><text x='140.0' y='318' text-anchor='middle' fill='#b8b8b8'>Before any shots</text><text x='280.0' y='318' text-anchor='middle' fill='#b8b8b8'>8 of 10</text><text x='420.0' y='318' text-anchor='middle' fill='#b8b8b8'>80 of 100</text><text x='560.0' y='318' text-anchor='middle' fill='#b8b8b8'>800 of 1,000</text><text x='320.0' y='342' text-anchor='middle' fill='#b8b8b8'>Shots watched (made of taken)</text><path d='M140.0 116.25L280.0 139.88L420.0 161.93L560.0 167.70' fill='none' stroke='#00d4ff' stroke-width='2'/><circle cx='140.0' cy='116.25' r='5' fill='#00d4ff'><title>Coach Hopeful, Before any shots: 90%</title></circle><circle cx='280.0' cy='139.88' r='5' fill='#00d4ff'><title>Coach Hopeful, 8 of 10: 85.5%</title></circle><circle cx='420.0' cy='161.93' r='5' fill='#00d4ff'><title>Coach Hopeful, 80 of 100: 81.3%</title></circle><circle cx='560.0' cy='167.70' r='5' fill='#00d4ff'><title>Coach Hopeful, 800 of 1,000: 80.2%</title></circle><text x='140.0' y='106.25' text-anchor='middle' fill='#ffffff'>90%</text><text x='280.0' y='129.88' text-anchor='middle' fill='#ffffff'>85.5%</text><text x='420.0' y='151.93' text-anchor='middle' fill='#ffffff'>81.3%</text><text x='574.0' y='161.70' font-weight='600' fill='#00d4ff'>Coach Hopeful: 80.2%</text><path d='M140.0 273.75L280.0 241.20L420.0 184.50L560.0 170.32' fill='none' stroke='#f0b429' stroke-width='2'/><circle cx='140.0' cy='273.75' r='5' fill='#f0b429'><title>Coach Doubtful, Before any shots: 60%</title></circle><circle cx='280.0' cy='241.20' r='5' fill='#f0b429'><title>Coach Doubtful, 8 of 10: 66.2%</title></circle><circle cx='420.0' cy='184.50' r='5' fill='#f0b429'><title>Coach Doubtful, 80 of 100: 77.0%</title></circle><circle cx='560.0' cy='170.32' r='5' fill='#f0b429'><title>Coach Doubtful, 800 of 1,000: 79.7%</title></circle><text x='140.0' y='293.75' text-anchor='middle' fill='#ffffff'>60%</text><text x='280.0' y='261.20' text-anchor='middle' fill='#ffffff'>66.2%</text><text x='420.0' y='204.50' text-anchor='middle' fill='#ffffff'>77.0%</text><text x='574.0' y='186.32' font-weight='600' fill='#f0b429'>Coach Doubtful: 79.7%</text></svg>
+<figcaption>grid Bayes calculation · priors centred on 90% and 60%, spread 10 points; peak of each posterior</figcaption>
+</figure>
+<p>Both coaches saw the same shots (same likelihood) but started from different beliefs (different priors), so at first they reach different answers (different posteriors). Think of it as a tug-of-war: each prior pulls toward its own guess with a fixed strength, while the data pulls both toward 80% and gets stronger with every shot. More shots make the data more certain, so its pull keeps getting stronger.</p>
+<p><strong>A warning about zero.</strong> If Coach Doubtful gives exactly 0% to "Sam is above 70%," then 0 × any likelihood = 0. Even 800 of 1,000 shots can never change that coach's mind. Never give exactly 0% to something that is possible; give it a small chance instead.</p>
+<p><strong>Remember</strong></p>
+<ul>
+<li>The more data you have, the less the prior matters.</li>
+<li>A test with 50 or 200 customers: choose the prior carefully, because it will shape the answer.</li>
+<li>A test with 200,000 customers: the data speaks for itself.</li>
+<li>Like two jurors who start with different gut feelings and hear the same 50 witnesses, beliefs move closer together.</li>
+</ul>
+<h2>Lesson 8: Bayesian A/B testing</h2>
+<p>A Bayesian A/B test answers two separate questions: how sure are we that B is better, and how much better is it?</p>
+<p><strong>The story.</strong> A small online bakery randomly shows visitors either the old cake photo (A) or a new one (B). Random assignment, as in your causal course, means any difference in sales is caused by the photo, not by confounders.</p>
+<p><strong>The two-hat game.</strong></p>
+<ol>
+<li>For each version, work out your updated belief (the posterior) about its true buying rate, as in Lesson 6.</li>
+<li>Turn each posterior into a hat of cards: believable rates get many cards, unlikely ones few.</li>
+<li>Pull one card from each hat and note which is higher. Repeat 10,000 times.</li>
+<li>The share of rounds B wins is the probability that B is truly better.</li>
+</ol>
+<p><strong>The results.</strong> Same proportions, very different certainty:</p>
+<table>
+<thead>
+<tr>
+<th>Data</th>
+<th>A bought</th>
+<th>B bought</th>
+<th>Chance B is better</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10 visitors each</td>
+<td>2 (20%)</td>
+<td>4 (40%)</td>
+<td>about 82%</td>
+</tr>
+<tr>
+<td>100 visitors each</td>
+<td>20 (20%)</td>
+<td>40 (40%)</td>
+<td>about 99.9%</td>
+</tr>
+</tbody>
+</table>
+<p>With 10 visitors each, the two hats overlap a lot (A roughly 5% to 50%, B roughly 15% to 70%). With 100 each, they barely overlap (A about 13% to 29%, B about 31% to 50%).</p>
+<p><strong>Three different percentages, often confused.</strong> With 100 visitors each:</p>
+<table>
+<thead>
+<tr>
+<th>Number</th>
+<th>What it answers</th>
+<th>Bakery result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chance B is better</td>
+<td>How sure are we?</td>
+<td>about 99.9%</td>
+</tr>
+<tr>
+<td>Lift</td>
+<td>How much better?</td>
+<td>about +95% (B sells nearly double)</td>
+</tr>
+<tr>
+<td>95% credible interval of the lift</td>
+<td>What range is the lift probably in?</td>
+<td>about +28% to +215%</td>
+</tr>
+</tbody>
+</table>
+<p>A +50% lift on 10 cakes per 100 visitors means 15 cakes. A "70% chance B is better" means a 30% chance it isn't, so it is not safe to call B the winner.</p>
+<p><strong>Bayesian vs p-value.</strong> A p-value asks: <em>if</em> A and B were truly the same, how surprising would this data be? That is the "if X were true" direction from Lesson 3, which is not what we actually want to know. The Bayesian test asks: <em>we saw</em> this data, so how likely is it that B is better? That is the question managers actually ask.</p>
+<p><strong>For your ads:</strong> A = the held-back group with no ads (the <strong>baseline</strong>, meaning the normal situation you compare against). B = the group that saw the ads.</p>
+<h2>Lesson 9: Shrinkage</h2>
+<p>Small groups produce extreme results by luck, so a Bayesian estimate pulls each group toward the overall average, more strongly when the group has little data.</p>
+<p><strong>The story.</strong> Blender X has 2 reviews averaging 5.0 stars. Blender Y has 500 reviews averaging 4.8. Sorting by average puts X on top, yet most people trust Y.</p>
+<p><strong>How luck creates "perfect" products.</strong> Imagine 10 new products that are secretly identical, each truly worth about 4.2 stars. With only 2 reviews each, their averages still ranged from 3.0 to 5.0, and two of them scored a perfect 5.0. Their future reviews will average about 4.2, just like a fair coin that landed heads twice is still a fair coin.</p>
+<p><strong>The fix: pretend reviews.</strong> Give every product 5 pretend reviews at the shop-wide average (4.2), then add its real reviews. For a product with two 5-star reviews: (5 + 5 + 5 × 4.2) ÷ (2 + 5) = 31 ÷ 7 = 4.43.</p>
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>Real reviews</th>
+<th>Raw average</th>
+<th>Adjusted estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Blender Y</td>
+<td>500</td>
+<td>4.8</td>
+<td>4.79</td>
+</tr>
+<tr>
+<td>Blender X</td>
+<td>2</td>
+<td>5.0</td>
+<td>4.43</td>
+</tr>
+<tr>
+<td>Unlucky product</td>
+<td>2</td>
+<td>3.0</td>
+<td>3.86</td>
+</tr>
+</tbody>
+</table>
+<p>After shrinkage, Y outranks X. Y barely moved because 500 real reviews far outweigh 5 pretend ones (Lesson 7).</p>
+<p><strong>The simulation.</strong> Across 200 products with 2 to 500 reviews each:</p>
+<ul>
+<li>Raw averages were off by about 0.26 stars on average; shrunk estimates by about 0.12. Shrinkage roughly halved the error.</li>
+<li>The raw top 5 were all 2-review products showing 5.0, with true quality only 4.0 to 4.6.</li>
+<li>The shrunk top 5 had 20 to 500 reviews, with true quality 4.5 to 4.8.</li>
+</ul>
+<p><strong>Remember</strong></p>
+<ul>
+<li><strong>Shrinkage:</strong> pulling each group's estimate toward the overall average, more strongly when the group has little data.</li>
+<li><strong>Borrowing strength:</strong> the overall average comes from all groups, so each group's estimate uses information from the others.</li>
+<li><strong>For your ads:</strong> a city with 30 customers showing +60% lift, when the overall lift is +5%, gets pulled most of the way back, to somewhere around +8% to +10%.</li>
+</ul>
+<h2>Lesson 10: Deciding when you're unsure</h2>
+<p>The best decision depends on two things: how likely each outcome is, and how much each mistake costs. "Probably true" and "worth acting on" are not the same.</p>
+<p><strong>The story.</strong> The app says 70% chance of rain. If Maria puts tables out and it rains, she loses €50 (wet cushions, cleanup). If she keeps them in and it's sunny, she loses €300 in missed customers.</p>
+<p>Most people say "keep them in, rain is likely." Count 10 such days (7 rainy, 3 sunny): tables out costs 7 × €50 = €350; tables in costs 3 × €300 = €900. Tables out wins, even though she'll be wrong more often, because each mistake is cheap.</p>
+<p><strong>The recipe.</strong> Expected loss = chance of being wrong × cost of being wrong. Work it out for each option, then pick the lowest. Each cell below shows chance of being wrong × cost of being wrong.</p>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Option 1: expected loss</th>
+<th>Option 2: expected loss</th>
+<th>Better choice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Maria: 70% rain, wet tables cost €50</td>
+<td>Tables out: 0.7 × €50 = €35</td>
+<td>Tables in: 0.3 × €300 = €90</td>
+<td>Tables out (€35 is lower)</td>
+</tr>
+<tr>
+<td>Maria: 70% rain, wet tables cost €200</td>
+<td>Tables out: 0.7 × €200 = €140</td>
+<td>Tables in: 0.3 × €300 = €90</td>
+<td>Tables in (€90 is lower)</td>
+</tr>
+<tr>
+<td>Ads: 85% chance they work</td>
+<td>Keep: 0.15 × €10,000 = €1,500</td>
+<td>Stop: 0.85 × €4,000 = €3,400</td>
+<td>Keep (€1,500 is lower)</td>
+</tr>
+<tr>
+<td>Ads: 60% chance they work</td>
+<td>Keep: 0.40 × €10,000 = €4,000</td>
+<td>Stop: 0.60 × €4,000 = €2,400</td>
+<td>Stop (€2,400 is lower)</td>
+</tr>
+</tbody>
+</table>
+<p>(Ad costs: keeping ads that don't work wastes €10,000 a month; stopping ads that do work loses €4,000 of extra sales.)</p>
+<p><strong>Remember</strong></p>
+<ul>
+<li><strong>Expected loss:</strong> the average cost of a decision if you made it many times.</li>
+<li>Same probability, different costs, different decision: Maria's choice flipped when cushions got pricier.</li>
+<li>A 60% chance the ads work can still mean "stop," because being wrong about keeping them is expensive.</li>
+</ul>
+<h2>Putting it together: the ad holdout test</h2>
+<p>In the course's worked example, there is about a 92% chance the retargeting ads increase sales, and keeping them is the lower-risk choice.</p>
+<p><strong>The setup (made-up numbers).</strong> 2,000 customers were held back with no ads, and 100 bought (5%). 2,000 saw the ads, and 120 bought (6%). About 100,000 customers a month would see the ads, each purchase earns €50, and the ads cost €30,000 a month. To keep it simple, the starting belief treated every buying rate as equally likely (a "flat" prior). In real work, base it on past campaigns (Lesson 2).</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Question</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Posteriors</td>
+<td>What are the believable buying rates for each group?</td>
+<td>Two hats of cards, one per group</td>
+</tr>
+<tr>
+<td>2. How sure?</td>
+<td>Chance ad group buys more than held-back group</td>
+<td>about 92%</td>
+</tr>
+<tr>
+<td>3. How much?</td>
+<td>Most likely lift</td>
+<td>about +20%</td>
+</tr>
+<tr>
+<td>4. Range</td>
+<td>95% credible interval of the lift</td>
+<td>about −7% to +56%</td>
+</tr>
+<tr>
+<td>5. Money</td>
+<td>Expected monthly profit from ads</td>
+<td>about €20,000</td>
+</tr>
+<tr>
+<td>6. Pays off?</td>
+<td>Chance the ads are profitable after their cost</td>
+<td>about 71%</td>
+</tr>
+<tr>
+<td>7. Decide</td>
+<td>Expected loss: keep vs stop</td>
+<td>Keep about €6,500; stop about €27,000</td>
+</tr>
+</tbody>
+</table>
+<p>Notice 92% and 71% differ: ads can raise sales a little without earning enough to cover €30,000.</p>
+<p><strong>The manager-ready sentence</strong></p>
+<blockquote>
+<p>There's about a 92% chance the retargeting ads really increase sales. The most likely lift is about 20%, though it could plausibly be anywhere from slightly negative to over 50%. After paying for the ads, there's about a 71% chance they're profitable, and keeping them is the lower-risk choice.</p>
+</blockquote>
+<p><strong>The code</strong> (numpy and scipy only; each step mirrors a lesson)</p>
+<pre><code class="language-python">import numpy as np
+from scipy.stats import binom
+
+rng = np.random.default_rng(42)
+rates = np.linspace(0, 0.2, 2001)                 # possible buying rates
+
+def posterior(bought, customers):
+    post = binom.pmf(bought, customers, rates)    # likelihood (flat prior)
+    return post / post.sum()                      # rescale to 100%
+
+A = rng.choice(rates, 10_000, p=posterior(100, 2000))   # held-back (baseline)
+B = rng.choice(rates, 10_000, p=posterior(120, 2000))   # saw ads
+lift = B / A - 1
+print(f"Chance ads increase sales: {(B &gt; A).mean():.0%}")
+print(f"Most likely lift: {np.median(lift):.0%}")
+print("95% credible interval:", np.percentile(lift, [2.5, 97.5]).round(2))
+
+customers, value, ad_cost = 100_000, 50, 30_000
+profit = (B - A) * customers * value - ad_cost    # profit in each possible world
+print(f"Chance ads are profitable: {(profit &gt; 0).mean():.0%}")
+print("Expected loss if keep:", np.maximum(-profit, 0).mean().round())
+print("Expected loss if stop:", np.maximum(profit, 0).mean().round())
+</code></pre>
+<h2>Cheat sheet</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Plain meaning</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Degree of belief</td>
+<td>How confident you are, as a number</td>
+<td>Lets you put a probability on one-off events</td>
+</tr>
+<tr>
+<td>Evidence</td>
+<td>New information that should change your confidence</td>
+<td>It is what pushes beliefs up or down</td>
+</tr>
+<tr>
+<td>Prior</td>
+<td>Your belief before the new data</td>
+<td>Your starting point; built from similar past cases</td>
+</tr>
+<tr>
+<td>Distribution</td>
+<td>How believable each possible value is</td>
+<td>Priors and posteriors are ranges, not single numbers</td>
+</tr>
+<tr>
+<td>Likelihood</td>
+<td>If this explanation were true, how often would we see this data?</td>
+<td>The data's "vote" for each explanation</td>
+</tr>
+<tr>
+<td>Base rate</td>
+<td>How common something is before any test</td>
+<td>Rare things make most positive results false alarms</td>
+</tr>
+<tr>
+<td>False positive</td>
+<td>A positive result for someone who doesn't have the thing</td>
+<td>Floods the results when the base rate is low</td>
+</tr>
+<tr>
+<td>Bayes' rule</td>
+<td>Prior × likelihood, then divide by the total so it adds up to 100%</td>
+<td>Combines what you believed with what you saw</td>
+</tr>
+<tr>
+<td>Posterior</td>
+<td>Your updated belief after the data</td>
+<td>Gives statements like "88% chance Sam is 70% or better"</td>
+</tr>
+<tr>
+<td>Credible interval</td>
+<td>Range holding, say, 95% of your posterior belief</td>
+<td>"95% chance the lift is between X and Y"</td>
+</tr>
+<tr>
+<td>Confidence interval</td>
+<td>Range from a method that captures the truth 95% of the time</td>
+<td>Says less than people think about this one result</td>
+</tr>
+<tr>
+<td>Lift</td>
+<td>How much higher B is than A, as a % of A</td>
+<td>Answers "how much?", not "how sure?"</td>
+</tr>
+<tr>
+<td>Baseline</td>
+<td>The normal situation you compare against</td>
+<td>In the ad test: the held-back group</td>
+</tr>
+<tr>
+<td>Shrinkage</td>
+<td>Pulling small groups toward the overall average</td>
+<td>Stops lucky small groups looking extreme</td>
+</tr>
+<tr>
+<td>Expected loss</td>
+<td>Chance of being wrong × cost of being wrong</td>
+<td>Turns beliefs into decisions</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Common traps</strong></p>
+<ul>
+<li>Flipping the direction: "if sick, the test is positive" is not "if positive, you're sick." Likelihoods are not the chance an explanation is true; Sam's three likelihoods added to only 41%.</li>
+<li>Ignoring the base rate: a test that never misses a sick person still gives only 4% for a 1-in-100 disease.</li>
+<li>"One data point tells you nothing": it tells you a little, and the little pushes add up.</li>
+<li>Giving exactly 0% to something possible: no amount of data can ever move it.</li>
+<li>Confusing "how sure" with "how much": 99.9% chance B is better and +95% lift are different facts.</li>
+<li>Acting on probability alone: a 60% chance the ads work can still mean "stop."</li>
+<li>Using the test's own result as the prior: that counts the same evidence twice.</li>
+</ul>
+        </div>
+
+        <div class="post-footer-nav">
+          <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2024 Sandesh Thapa. All rights reserved.</p>
+        <p>Built with passion for data, analytics, and engineering</p>
+      </div>
+    </footer>
+
+    <!-- Cookie/Tracking Disclaimer Banner -->
+    <div id="cookie-banner" class="cookie-banner">
+      <div class="cookie-content">
+        <div class="cookie-text">
+          <i class="fas fa-info-circle"></i>
+          <p>
+            <strong>Privacy Notice:</strong> This website uses Google Analytics to understand visitor
+            traffic and improve user experience. No tracking occurs unless you accept below, and your
+            IP address is anonymized.
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Learn more about our privacy practices</a>.
+          </p>
+        </div>
+        <div class="cookie-buttons">
+          <button id="accept-cookies" class="btn-cookie btn-accept">Accept</button>
+          <button id="decline-cookies" class="btn-cookie btn-decline">Decline</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+  </body>
+</html>
